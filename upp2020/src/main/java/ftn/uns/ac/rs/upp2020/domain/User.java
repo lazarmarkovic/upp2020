@@ -19,11 +19,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "email", length = 512, nullable = false)
-    private String email;
+    @Column(name = "username", length = 512, nullable = false)
+    private String username;
 
     @Column(name = "password", length = 512, nullable = false)
     private String password;
+
+    @Column(name = "email", length = 512, nullable = false)
+    private String email;
 
     @Column(name = "role", length = 256, nullable = false)
     private Role role;
