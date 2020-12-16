@@ -26,8 +26,8 @@ spring.jackson.serialization.FAIL_ON_EMPTY_BEANS: false
 spring.mail:
   host: smtp.gmail.com
   port: 587
-  username: somemail
-  password: somepass
+  username: upp2020tim29@gmail.com
+  password: dmMx3xpzyf5CnDU
 
   properties.mail.smtp:
     auth: true

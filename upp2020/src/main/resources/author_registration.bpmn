@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_1ht57ry" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+  <bpmn:process id="author_registration" isExecutable="true" camunda:candidateStarterUsers="guest">
+    <bpmn:startEvent id="StartEvent_1" camunda:initiator="starter">
+      <bpmn:extensionElements>
+        <camunda:executionListener class="ftn.uns.ac.rs.upp2020.camunda_listener.GetGenreFieldsListener" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_01aagyl</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_01aagyl" sourceRef="StartEvent_1" targetRef="Activity_1iqs2lz" />
+    <bpmn:userTask id="Activity_1iqs2lz" name="registration data input" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="username" label="Username" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="password" label="Password" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="email" label="Email" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="firstName" label="First name" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="lastName" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="city" label="City" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="country" label="Country" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="select_genres" label="Favourite genres" type="multiselect">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+        <camunda:taskListener event="create">
+          <camunda:script scriptFormat="Groovy">taskFormData = task.getExecution().getProcessEngineServices().getFormService().getTaskFormData(task.getId());
+genres= task.getExecution().getVariable("allGenres");
+
+formFields = taskFormData. getFormFields();
+if(formFields!=null){
+   for(field in formFields){
+       if( field.getId() == "select_genres"){
+           items = field.getType().getValues();
+           for(s in genres){
+               items.put(s.getCode(),s.getName());
+           }
+       }
+   }
+}</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_01aagyl</bpmn:incoming>
+      <bpmn:incoming>Flow_19ua91z</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wo8buk</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0wo8buk" sourceRef="Activity_1iqs2lz" targetRef="Activity_1trhtxt" />
+    <bpmn:serviceTask id="Activity_1trhtxt" name="process input data" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.AuthorRegistrationDelegate">
+      <bpmn:incoming>Flow_0wo8buk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1w0255p</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1w0255p" sourceRef="Activity_1trhtxt" targetRef="Gateway_0pbjjka" />
+    <bpmn:exclusiveGateway id="Gateway_0pbjjka">
+      <bpmn:incoming>Flow_1w0255p</bpmn:incoming>
+      <bpmn:outgoing>Flow_19ua91z</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1oehd49</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_19ua91z" name="not valid" sourceRef="Gateway_0pbjjka" targetRef="Activity_1iqs2lz">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isRegFormValid==false}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1oehd49" name="valid" sourceRef="Gateway_0pbjjka" targetRef="Activity_1rcypuq">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${isRegFormValid==true}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sendTask id="Activity_1rcypuq" name="send verification email" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.EmailDelegate">
+      <bpmn:incoming>Flow_1oehd49</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xx3h7w</bpmn:outgoing>
+    </bpmn:sendTask>
+    <bpmn:sequenceFlow id="Flow_1xx3h7w" sourceRef="Activity_1rcypuq" targetRef="Activity_1po945r" />
+    <bpmn:userTask id="Activity_1po945r" name="verification code input" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="code" label="Verification code" type="string">
+            <camunda:validation>
+              <camunda:constraint name="required" />
+            </camunda:validation>
+          </camunda:formField>
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1xx3h7w</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rr5j6y</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1rr5j6y" sourceRef="Activity_1po945r" targetRef="Activity_1teqokl" />
+    <bpmn:serviceTask id="Activity_1teqokl" name="process verification code" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.VerifyUserDelegate">
+      <bpmn:incoming>Flow_1rr5j6y</bpmn:incoming>
+      <bpmn:outgoing>Flow_1x2vt31</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_12zfh71">
+      <bpmn:incoming>Flow_1x2vt31</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1x2vt31" sourceRef="Activity_1teqokl" targetRef="Event_12zfh71" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author_registration">
+      <bpmndi:BPMNEdge id="Flow_01aagyl_di" bpmnElement="Flow_01aagyl">
+        <di:waypoint x="210" y="118" />
+        <di:waypoint x="210" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wo8buk_di" bpmnElement="Flow_0wo8buk">
+        <di:waypoint x="210" y="240" />
+        <di:waypoint x="210" y="270" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w0255p_di" bpmnElement="Flow_1w0255p">
+        <di:waypoint x="210" y="350" />
+        <di:waypoint x="210" y="395" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19ua91z_di" bpmnElement="Flow_19ua91z">
+        <di:waypoint x="235" y="420" />
+        <di:waypoint x="350" y="420" />
+        <di:waypoint x="350" y="200" />
+        <di:waypoint x="260" y="200" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="359" y="303" width="41" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oehd49_di" bpmnElement="Flow_1oehd49">
+        <di:waypoint x="210" y="445" />
+        <di:waypoint x="210" y="500" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="214" y="463" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xx3h7w_di" bpmnElement="Flow_1xx3h7w">
+        <di:waypoint x="210" y="580" />
+        <di:waypoint x="210" y="630" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rr5j6y_di" bpmnElement="Flow_1rr5j6y">
+        <di:waypoint x="210" y="710" />
+        <di:waypoint x="210" y="760" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1x2vt31_di" bpmnElement="Flow_1x2vt31">
+        <di:waypoint x="260" y="800" />
+        <di:waypoint x="372" y="800" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="192" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0pnqxrc_di" bpmnElement="Activity_1iqs2lz">
+        <dc:Bounds x="160" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kwkyx0_di" bpmnElement="Activity_1trhtxt">
+        <dc:Bounds x="160" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1goaq3q_di" bpmnElement="Gateway_0pbjjka" isMarkerVisible="true">
+        <dc:Bounds x="185" y="395" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1am3shl_di" bpmnElement="Activity_1rcypuq">
+        <dc:Bounds x="160" y="500" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0s1n3u8_di" bpmnElement="Activity_1po945r">
+        <dc:Bounds x="160" y="630" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05yq2l7_di" bpmnElement="Activity_1teqokl">
+        <dc:Bounds x="160" y="760" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12zfh71_di" bpmnElement="Event_12zfh71">
+        <dc:Bounds x="372" y="782" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

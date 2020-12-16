@@ -100,6 +100,14 @@
       <version>0.4</version>
     </dependency>
 
+    <!-- Groovy stuff  -->
+    <dependency>
+      <groupId>org.codehaus.groovy</groupId>
+      <artifactId>groovy-all</artifactId>
+      <version>3.0.2</version>
+      <type>pom</type>
+    </dependency>
+
   </dependencies>
 
   <build>

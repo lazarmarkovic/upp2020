@@ -1,23 +1,27 @@
 package ftn.uns.ac.rs.upp2020.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Entity
-@Where(clause="deleted_at IS NULL")
 @Table(name = "aa__users")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<UserGenre> userGenres;
 
     @Column(name = "username", length = 512, nullable = false)
     private String username;
@@ -25,20 +29,41 @@ public class User {
     @Column(name = "password", length = 512, nullable = false)
     private String password;
 
-    @Column(name = "email", length = 512, nullable = false)
-    private String email;
-
+    @Enumerated(EnumType.STRING)
     @Column(name = "role", length = 256, nullable = false)
     private Role role;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    @Column(name = "email", length = 512, nullable = false)
+    private String email;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    @Column(name = "first_name", length = 512, nullable = false)
+    private String firstName;
 
-    public User() {
-        this.createdAt = LocalDateTime.now();
-        this.deletedAt = null;
+    @Column(name = "last_name", length = 512, nullable = false)
+    private String lastName;
+
+    @Column(name = "city", length = 512, nullable = false)
+    private String city;
+
+    @Column(name = "country", length = 512, nullable = false)
+    private String country;
+
+    @Column(name = "activation_code", length = 256, nullable = false)
+    private String verificationCode;
+
+    @Column(name = "activated", nullable = false)
+    private Boolean verified;
+
+    public User(String username, String password, Role role, String email, String firstName, String lastName, String city, String country, String verificationCode, Boolean verified) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.city = city;
+        this.country = country;
+        this.verificationCode = verificationCode;
+        this.verified = verified;
     }
 }
