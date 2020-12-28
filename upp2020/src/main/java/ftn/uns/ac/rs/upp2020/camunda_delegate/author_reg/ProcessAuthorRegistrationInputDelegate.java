@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg;
 
 import ftn.uns.ac.rs.upp2020.domain.UserGenre;
 import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @Service
-public class AuthorRegistrationDelegate implements JavaDelegate {
+public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
 
     @Autowired
     IdentityService identityService;

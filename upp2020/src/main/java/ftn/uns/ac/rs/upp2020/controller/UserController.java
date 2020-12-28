@@ -3,6 +3,7 @@ package ftn.uns.ac.rs.upp2020.controller;
 import ftn.uns.ac.rs.upp2020.dto.*;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import org.camunda.bpm.engine.*;
+import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,27 @@ public class UserController {
     }
 
 
+    @GetMapping(path="/confirm-email/{processId}/{confCode}", consumes = "application/json")
+    public ResponseEntity<?> EmailVerification(
+            @PathVariable String processId,
+            @PathVariable String confCode) {
+
+        runtimeService.setVariable(
+                processId,
+                "confirmationEmailCode",
+                confCode);
+
+        MessageCorrelationResult messageCorrelationResult =
+                runtimeService
+                    .createMessageCorrelation("CatchConfirmationEmailMessage")
+                    .processInstanceId(processId)
+                    .correlateWithResult();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    
+    /* Generic APIs */
     @PostMapping(path = "/submit/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> submit(
             @RequestBody List<InputDataDTO> data,
