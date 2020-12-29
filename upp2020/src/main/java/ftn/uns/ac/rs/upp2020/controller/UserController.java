@@ -81,6 +81,7 @@ public class UserController {
         if (authToken != null){
             username = this.tokenUtils.getUsernameFromToken(authToken);
         }
+        
 
         List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
         List<TaskDTO> taskDTOs = tasks.stream()
@@ -92,4 +93,34 @@ public class UserController {
 
         return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
     }
+
+    @GetMapping(path = "/publish-book", produces = "application/json")
+    public @ResponseBody Boolean publishBook(){
+        identityService.setAuthenticatedUserId("guest");
+        ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
+        runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
+
+        System.out.println("PUBLISH STARTED");
+        return true;
+    }
+
+    @PostMapping(path = "/publish/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<?> publish(
+            @RequestBody List<InputDataDTO> data,
+            @PathVariable String taskId ){
+
+        System.out.println(">> SUBMIT TASK: ");
+        System.out.println(data);
+        HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
+                .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+
+        try {
+            formService.submitTaskForm(taskId, map);
+        }catch (Exception e){
+            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<> (HttpStatus.OK);
+    }
+
 }

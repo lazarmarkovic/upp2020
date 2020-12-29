@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_0498x2l" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="4.4.0">
+  <bpmn:process id="Process_0qg34ld" name="writer creates a book" isExecutable="true" camunda:candidateStarterUsers="guest">
+    <bpmn:endEvent id="Event_19zwk0h">
+      <bpmn:incoming>Flow_0gwu8av</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:startEvent id="StartEvent_1" camunda:initiator="starter">
+      <bpmn:outgoing>Flow_0h1geav</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0h1geav" sourceRef="StartEvent_1" targetRef="Activity_0s40u3p" />
+    <bpmn:sequenceFlow id="Flow_1xodg4k" sourceRef="Activity_0s40u3p" targetRef="Activity_0egfuut" />
+    <bpmn:userTask id="Activity_0s40u3p" name="book data input" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="title" label="Title" type="string" />
+          <camunda:formField id="genre" label="Genre" type="string" />
+          <camunda:formField id="synopsis" label="Synopsis" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0h1geav</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xodg4k</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0gwu8av" sourceRef="Activity_0egfuut" targetRef="Event_19zwk0h" />
+    <bpmn:sendTask id="Activity_0egfuut" name="send new publish notification" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.PublishNotifierEmail">
+      <bpmn:incoming>Flow_1xodg4k</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gwu8av</bpmn:outgoing>
+    </bpmn:sendTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0qg34ld">
+      <bpmndi:BPMNEdge id="Flow_0h1geav_di" bpmnElement="Flow_0h1geav">
+        <di:waypoint x="197" y="118" />
+        <di:waypoint x="197" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xodg4k_di" bpmnElement="Flow_1xodg4k">
+        <di:waypoint x="197" y="290" />
+        <di:waypoint x="197" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gwu8av_di" bpmnElement="Flow_0gwu8av">
+        <di:waypoint x="197" y="480" />
+        <di:waypoint x="197" y="572" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="82" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a857qw_di" bpmnElement="Activity_0s40u3p">
+        <dc:Bounds x="147" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_19zwk0h_di" bpmnElement="Event_19zwk0h">
+        <dc:Bounds x="179" y="572" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12vf0lc_di" bpmnElement="Activity_0egfuut">
+        <dc:Bounds x="147" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
