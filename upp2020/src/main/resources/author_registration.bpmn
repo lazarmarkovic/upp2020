@@ -13,41 +13,51 @@
           <camunda:formField id="username" label="Username" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.UsernameValidator" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.UniqueUsernameValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="password" label="Password" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="minlength" config="5" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="email" label="Email" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.EmailValidator" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.UniqueEmailValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="firstName" label="First name" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="lastName" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="city" label="City" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="country" label="Country" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
           <camunda:formField id="select_genres" label="Favourite genres" type="multiselect">
             <camunda:validation>
               <camunda:constraint name="required" />
+              <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.SelectGenresValidator" />
             </camunda:validation>
           </camunda:formField>
         </camunda:formData>
@@ -95,12 +105,8 @@ if(formFields!=null){
     <bpmn:sequenceFlow id="Flow_1xx3h7w" sourceRef="Activity_1rcypuq" targetRef="Event_0mb6oqx" />
     <bpmn:serviceTask id="Activity_1teqokl" name="process email confirmation code" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg.ProcessEmailConfirmationCodeDelegate">
       <bpmn:incoming>Flow_086uokj</bpmn:incoming>
-      <bpmn:outgoing>Flow_1x2vt31</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1gpqfl9</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:endEvent id="Event_12zfh71">
-      <bpmn:incoming>Flow_1x2vt31</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1x2vt31" sourceRef="Activity_1teqokl" targetRef="Event_12zfh71" />
     <bpmn:exclusiveGateway id="Gateway_09il53q">
       <bpmn:incoming>Flow_1ig0yr3</bpmn:incoming>
       <bpmn:incoming>Flow_19ua91z</bpmn:incoming>
@@ -114,13 +120,17 @@ if(formFields!=null){
       <bpmn:messageEventDefinition id="MessageEventDefinition_1frru96" messageRef="Message_1vk9y39" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_086uokj" sourceRef="Event_0mb6oqx" targetRef="Activity_1teqokl" />
+    <bpmn:endEvent id="Event_1j5a9st">
+      <bpmn:incoming>Flow_1gpqfl9</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1gpqfl9" sourceRef="Activity_1teqokl" targetRef="Event_1j5a9st" />
   </bpmn:process>
   <bpmn:message id="Message_1vk9y39" name="CatchConfirmationEmailMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author_registration">
       <bpmndi:BPMNEdge id="Flow_086uokj_di" bpmnElement="Flow_086uokj">
-        <di:waypoint x="480" y="268" />
-        <di:waypoint x="480" y="330" />
+        <di:waypoint x="480" y="228" />
+        <di:waypoint x="480" y="280" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ezhsk9_di" bpmnElement="Flow_0ezhsk9">
         <di:waypoint x="300" y="205" />
@@ -130,13 +140,9 @@ if(formFields!=null){
         <di:waypoint x="300" y="118" />
         <di:waypoint x="300" y="155" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1x2vt31_di" bpmnElement="Flow_1x2vt31">
-        <di:waypoint x="480" y="410" />
-        <di:waypoint x="480" y="482" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1xx3h7w_di" bpmnElement="Flow_1xx3h7w">
         <di:waypoint x="480" y="160" />
-        <di:waypoint x="480" y="232" />
+        <di:waypoint x="480" y="192" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1oehd49_di" bpmnElement="Flow_1oehd49">
         <di:waypoint x="325" y="500" />
@@ -164,6 +170,10 @@ if(formFields!=null){
         <di:waypoint x="300" y="320" />
         <di:waypoint x="300" y="360" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gpqfl9_di" bpmnElement="Flow_1gpqfl9">
+        <di:waypoint x="480" y="360" />
+        <di:waypoint x="480" y="432" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="282" y="82" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -179,20 +189,20 @@ if(formFields!=null){
       <bpmndi:BPMNShape id="Activity_1am3shl_di" bpmnElement="Activity_1rcypuq">
         <dc:Bounds x="430" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05yq2l7_di" bpmnElement="Activity_1teqokl">
-        <dc:Bounds x="430" y="330" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_12zfh71_di" bpmnElement="Event_12zfh71">
-        <dc:Bounds x="462" y="482" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_09il53q_di" bpmnElement="Gateway_09il53q" isMarkerVisible="true">
         <dc:Bounds x="275" y="155" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1qht2cg_di" bpmnElement="Event_0mb6oqx">
-        <dc:Bounds x="462" y="232" width="36" height="36" />
+        <dc:Bounds x="462" y="192" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="505" y="236" width="90" height="27" />
+          <dc:Bounds x="505" y="196" width="90" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05yq2l7_di" bpmnElement="Activity_1teqokl">
+        <dc:Bounds x="430" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1j5a9st_di" bpmnElement="Event_1j5a9st">
+        <dc:Bounds x="462" y="432" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -108,8 +109,9 @@ public class UserController {
         List<TaskDTO> taskDTOs = tasks.stream()
                 .map(t -> {
                     String taskName = t.getName().split(" ")[0];
-                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName);
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
                 })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
