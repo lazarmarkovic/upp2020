@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "upp2020Front": {
+    "UPP2020Frontend": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:application": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/upp2020Front",
+            "outputPath": "dist/UPP2020Frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -65,18 +66,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "upp2020Front:build"
+            "browserTarget": "UPP2020Frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "upp2020Front:build:production"
+              "browserTarget": "UPP2020Frontend:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "upp2020Front:build"
+            "browserTarget": "UPP2020Frontend:build"
           }
         },
         "test": {
@@ -91,6 +92,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -113,19 +115,19 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "upp2020Front:serve"
+            "devServerTarget": "UPP2020Frontend:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "upp2020Front:serve:production"
+              "devServerTarget": "UPP2020Frontend:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "upp2020Front",
+  "defaultProject": "UPP2020Frontend",
   "cli": {
-    "analytics": false
+    "analytics": "1eeb6b24-d615-4013-a5f8-ca83dfa3f388"
   }
 }

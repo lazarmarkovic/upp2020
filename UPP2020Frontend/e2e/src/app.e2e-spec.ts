@@ -10,7 +10,7 @@ describe('workspace-project App', () => {
 
   it('should display welcome message', async () => {
     await page.navigateTo();
-    expect(await page.getTitleText()).toEqual('upp2020Front app is running!');
+    expect(await page.getTitleText()).toEqual('UPP2020Frontend app is running!');
   });
 
   afterEach(async () => {
