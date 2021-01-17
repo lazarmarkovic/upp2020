@@ -3,11 +3,14 @@ package ftn.uns.ac.rs.upp2020.controller;
 import ftn.uns.ac.rs.upp2020.dto.LoginDTO;
 import ftn.uns.ac.rs.upp2020.dto.TokenDTO;
 import ftn.uns.ac.rs.upp2020.domain.User;
+import ftn.uns.ac.rs.upp2020.dto.UserDTO;
 import ftn.uns.ac.rs.upp2020.repository.UserRepository;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 
 import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
+import ftn.uns.ac.rs.upp2020.service.UserService;
 import org.camunda.bpm.engine.IdentityService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.ws.rs.BadRequestException;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -47,6 +51,12 @@ public class AuthenticationController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private UserService userService;
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -85,6 +95,22 @@ public class AuthenticationController {
             e.printStackTrace();
             throw new BadRequestException("Error occurred!");
         }
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/authUser")
+    public ResponseEntity<?> getAuthUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        UserDetails userDetails = (UserDetails) auth.getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+
+        UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        userDTO.setGenres(user.getUserGenres()
+                .stream()
+                .map((ug) -> ug.getGenre().getCode())
+                .collect(Collectors.toList()));
+
+        return new ResponseEntity<>(userDTO, HttpStatus.OK);
     }
 
 }
