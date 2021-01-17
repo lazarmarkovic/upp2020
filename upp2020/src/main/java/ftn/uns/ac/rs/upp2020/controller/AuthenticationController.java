@@ -64,12 +64,6 @@ public class AuthenticationController {
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDto){
         System.out.println(">> login : username " + loginDto.getUsername() + " pass " + loginDto.getPassword());
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if(!(authentication instanceof AnonymousAuthenticationToken)){
-            throw  new BadRequestException("Unauthorized!");
-        }
-
         try{
             if(this.authenticationService.login(loginDto)){
                 HttpHeaders httpHeaders = new HttpHeaders();

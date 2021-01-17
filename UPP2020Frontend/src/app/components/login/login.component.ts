@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth.service';
 import {ToastrService} from 'ngx-toastr';
+import {Token} from '../../models/token.model';
+import {User} from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -23,30 +25,56 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin(): void {
+    console.log('Username: ' + this.loginForm.value.username);
+    console.log('Password: ' + this.loginForm.value.password);
     if (this.loginForm?.valid) {
       this.authService
         .login(this.loginForm.value.username, this.loginForm.value.password)
         .subscribe(
-          (response: any) => {
-            sessionStorage.setItem('accessToken', response.accessToken);
+          (response: Token) => {
+            console.log('Token: ' + JSON.stringify(response));
+            sessionStorage.setItem('accessToken', response.token);
             this.tService.success('User successfully logged in.', 'Success');
+            this.getAuthenticatedUser();
           },
           err => {
             if (err.status === 400) {
-              console.log('Errrrorrr');
               this.tService.warning('Error', 'Warning');
               this.loginForm.patchValue({
                 username: '',
-                password: ''
+                password: '',
               });
               this.loginForm.markAsPristine();
               this.loginForm.markAsUntouched();
             }
             else {
-              console.log(err);
+              console.log('Error: ' + JSON.stringify(err));
             }
           }
         );
+    }
+  }
+
+  getAuthenticatedUser(): void {
+    this.authService
+      .getAuthUser()
+      .subscribe(
+        (response: User) => {
+          sessionStorage.setItem('authUser', JSON.stringify(response));
+          console.log(JSON.stringify(response));
+        },
+        err => {
+          console.log(err);
+        }
+      );
+  }
+
+  getCurrentUser(): User | undefined {
+    const userJSON = sessionStorage.getItem('authUser');
+    if (userJSON) {
+      return JSON.parse(userJSON);
+    } else {
+      return undefined;
     }
   }
 
