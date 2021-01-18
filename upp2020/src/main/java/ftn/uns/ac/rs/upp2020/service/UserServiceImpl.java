@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserService implements ftn.uns.ac.rs.upp2020.service.us.UserService {
 
     @Autowired
     private UserRepository userRepository;

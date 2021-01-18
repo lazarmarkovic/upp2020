@@ -7,17 +7,17 @@ import { Observable } from 'rxjs';
 })
 export class AuthService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
 
   login(username: string, password: string): Observable<any> {
     const user = {
       username,
       password,
     };
-    return this.http.post('http://localhost:8080/login', user);
+    return this.httpClient.post('http://localhost:8080/login', user);
   }
 
   getAuthUser(): Observable<any> {
-    return this.http.get('http://localhost:8080/authUser');
+    return this.httpClient.get('http://localhost:8080/authUser');
   }
 }

@@ -27,13 +27,17 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
+import { MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { TaskComponent } from './components/task/task.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     NavigationComponent,
-    TaskListComponent
+    TaskListComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,8 @@ import { MatListModule } from '@angular/material/list';
     MatCheckboxModule,
     MatToolbarModule,
     MatListModule,
+    MatTableModule,
+    MatPaginatorModule,
   ],
   providers: [
     {

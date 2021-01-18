@@ -40,7 +40,7 @@ public class MultiselectType extends SimpleFormFieldType {
     private void validateValue(Object value) {
         if(value != null){
             ArrayList.class.cast(value);
-            for (String s: (ArrayList<String> )value ) {
+            for (String s: (ArrayList<String>) value) {
                 if (values != null && !values.containsKey(s)){
                     throw new ProcessEngineException("Invalid value for multiselect form property: " + value);
                 }
