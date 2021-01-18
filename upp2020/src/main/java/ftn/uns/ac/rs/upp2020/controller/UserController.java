@@ -3,6 +3,7 @@ package ftn.uns.ac.rs.upp2020.controller;
 import ftn.uns.ac.rs.upp2020.dto.*;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import org.camunda.bpm.engine.*;
+import org.camunda.bpm.engine.impl.identity.Authentication;
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Controller
 @RequestMapping("/user")
@@ -38,9 +38,8 @@ public class UserController {
     @Autowired
     private TokenUtils tokenUtils;
 
-
     @GetMapping(path = "/start-author-registration", produces = "application/json")
-    public @ResponseBody Boolean runRegistration(){
+    public @ResponseBody Boolean runRegistration() {
         identityService.setAuthenticatedUserId("guest");
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("author_registration");
         runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
@@ -49,19 +48,71 @@ public class UserController {
         return true;
     }
 
-
     @PostMapping(path = "/submit/{taskId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<?> submit(
-            @RequestBody List<InputDataDTO> data,
-            @PathVariable String taskId ){
+    public @ResponseBody ResponseEntity<?> submit(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
 
         System.out.println(">> SUBMIT TASK: ");
         System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
-        //Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        //String processInstanceId = task.getProcessInstanceId();
+        // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        // String processInstanceId = task.getProcessInstanceId();
+
+        try {
+            formService.submitTaskForm(taskId, map);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/tasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> get(HttpServletRequest http) {
+        String authToken = http.getHeader("X-Auth-Token");
+
+        String username = "guest";
+        if (authToken != null) {
+            username = this.tokenUtils.getUsernameFromToken(authToken);
+        }
+
+        List<Task> tasks = taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream().map(t -> {
+            String taskName = t.getName().split(" ")[0];
+            return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName);
+        }).collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/publish-book", produces = "application/json")
+    public @ResponseBody Boolean publishBook() {
+        identityService.setAuthenticatedUserId("guest");
+        ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
+        runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
+
+
+        System.out.println("PUBLISH STARTED");
+        return true;
+    }
+
+    @PostMapping(path = "/publish/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<?> publish(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
+        identityService.setAuthenticatedUserId("guest");
+        System.out.println(">> SUBMIT TASK: ");
+        System.out.println(data);
+        HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
+                .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+        
+        System.out.println(taskId);
+        System.out.println(runtimeService.toString());
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "loggedInWriter", "guest");
+
 
         try {
             formService.submitTaskForm(taskId, map);
@@ -72,47 +123,50 @@ public class UserController {
         return new ResponseEntity<> (HttpStatus.OK);
     }
 
+    @PostMapping(path = "/approve/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<?> approveReview(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
+        try {
+            System.out.println(">> APPROVE TASK: ");
+            System.out.println(data);
+            HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
+                    .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
-    @GetMapping(path = "/tasks", produces = "application/json")
-    public @ResponseBody ResponseEntity<List<TaskDTO>> get(HttpServletRequest http){
-        String authToken = http.getHeader("X-Auth-Token");
+            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+            String processInstanceId = task.getProcessInstanceId();
 
-        String username = "guest";
-        if (authToken != null){
-            username = this.tokenUtils.getUsernameFromToken(authToken);
+            runtimeService.setVariable(processInstanceId, "editor", "guest");
+
+
+            try {
+                formService.submitTaskForm(taskId, map);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+        } catch(Exception e) {
+            e.printStackTrace();
         }
-        
+        return new ResponseEntity<>(HttpStatus.OK);
 
-        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
-        List<TaskDTO> taskDTOs = tasks.stream()
-                .map(t -> {
-                    String taskName = t.getName().split(" ")[0];
-                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName);
-                })
-                .collect(Collectors.toList());
-
-        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
     }
 
-    @GetMapping(path = "/publish-book", produces = "application/json")
-    public @ResponseBody Boolean publishBook(){
-        identityService.setAuthenticatedUserId("guest");
-        ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
-        runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
 
-        System.out.println("PUBLISH STARTED");
-        return true;
-    }
-
-    @PostMapping(path = "/publish/{taskId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<?> publish(
-            @RequestBody List<InputDataDTO> data,
-            @PathVariable String taskId ){
+    @PostMapping(path = "/explanation/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<?> createExplanation(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
 
         System.out.println(">> SUBMIT TASK: ");
         System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+        
+        System.out.println(taskId);
+        System.out.println(runtimeService.toString());
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "loggedInWriter", "guest");
+
 
         try {
             formService.submitTaskForm(taskId, map);
