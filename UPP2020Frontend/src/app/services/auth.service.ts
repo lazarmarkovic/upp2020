@@ -14,10 +14,10 @@ export class AuthService {
       username,
       password,
     };
-    return this.httpClient.post('http://localhost:8080/login', user);
+    return this.httpClient.post('/login', user);
   }
 
   getAuthUser(): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/auth-user');
+    return this.httpClient.get('/auth-user');
   }
 }

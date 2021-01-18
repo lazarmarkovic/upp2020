@@ -89,6 +89,24 @@ export class TaskComponent implements OnInit {
     );
   }
 
+  uploadFile(event: any): void{
+    const files = event.target.files;
+    //  let fileList: FileList = this.regUserForm.value.pdf;
+    //  alert(fileList);
+    const file = files[0];
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    this.taskService.uploadFile(this.formDTO.taskId, formData).subscribe(
+      data => {
+        this.tService.success('Files uploaded!', 'Success');
+      },
+      err => {
+        console.log(err.error);
+
+      }
+    );
+  }
 
 
 }

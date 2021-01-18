@@ -17,8 +17,10 @@ import org.camunda.bpm.engine.form.FormFieldValidationConstraint;
 import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -143,5 +145,20 @@ public class TaskController {
 
         return new FormDTO(task.getName() ,task.getId(), task.getProcessInstanceId(), properties, readonlyFields);
     }
+
+
+    @PostMapping(value = "/{taskId}/upload")
+    public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file, @PathVariable String taskId){
+        try{
+            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+            String processInstance = task.getProcessInstanceId();
+            runtimeService.setVariable(processInstance, "file", file.getBytes());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
 
 }

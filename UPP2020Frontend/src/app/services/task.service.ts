@@ -10,14 +10,18 @@ export class TaskService {
   constructor(private httpClient: HttpClient) { }
 
   getTaskList(): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/tasks');
+    return this.httpClient.get('/tasks');
   }
 
   getTaskForm(taskId: string | undefined): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/tasks/' + taskId + '/form');
+    return this.httpClient.get('/tasks/' + taskId + '/form');
   }
 
   submit(data: any, taskId: string): Observable<any> {
-    return this.httpClient.post('http://localhost:8080/tasks/submit/' + taskId, data);
+    return this.httpClient.post('/tasks/submit/' + taskId, data);
+  }
+
+  uploadFile(taskId: string, data: FormData): Observable<any>{
+    return this.httpClient.post('/tasks/' + taskId + '/upload', data);
   }
 }

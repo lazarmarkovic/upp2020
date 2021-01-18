@@ -55,4 +55,8 @@ export class TaskListComponent implements OnInit, AfterViewInit {
   viewForm(taskId: string): void {
     this.router.navigate(['/task/' + taskId]);
   }
+
+  refreshTable(): void {
+    this.getTasks();
+  }
 }

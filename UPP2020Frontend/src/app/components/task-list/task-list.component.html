@@ -1,4 +1,10 @@
 <div class="mat-elevation-z8">
+  <button
+    mat-icon-button
+    aria-label="Refresh task list"
+    (click)="refreshTable()">
+    <mat-icon>refresh</mat-icon>
+  </button>
   <table mat-table [dataSource]="dataSource">
 
 <!--    &lt;!&ndash; taskId Column &ndash;&gt;-->

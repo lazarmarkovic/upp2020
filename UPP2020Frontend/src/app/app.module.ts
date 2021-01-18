@@ -7,6 +7,7 @@ import { ToastrModule } from 'ngx-toastr';
 
 /* My imports  */
 import { AuthInterceptor } from './auth/auth.interceptor';
+import { APIInterceptor } from './auth/api.interceptor';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './components/main/app.component';
 import { LoginComponent } from './components/login/login.component';
@@ -30,6 +31,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { TaskComponent } from './components/task/task.component';
+
 
 @NgModule({
   declarations: [
@@ -68,6 +70,11 @@ import { TaskComponent } from './components/task/task.component';
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: APIInterceptor,
       multi: true,
     }
   ],

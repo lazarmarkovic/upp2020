@@ -35,7 +35,7 @@
 
           <!--upload file; treba jos neke stvari dodati -->
           <input type="file" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
-                 class="form-control" (change)="uploadFile($event.target.files)"
+                 class="form-control" (change)="uploadFile($event)"
                  *ngIf="field.type.name=='string' && field.id != 'password' && field.id == 'pdf'">
 
           <input type="password" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
