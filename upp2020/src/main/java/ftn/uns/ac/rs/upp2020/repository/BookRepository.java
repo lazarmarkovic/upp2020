@@ -1,14 +1,15 @@
 package ftn.uns.ac.rs.upp2020.repository;
 
 import ftn.uns.ac.rs.upp2020.domain.Book;
-import ftn.uns.ac.rs.upp2020.domain.Genre;
-import ftn.uns.ac.rs.upp2020.domain.UserGenre;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-public interface BookRepository  extends JpaRepository<UserGenre, Long> {
-    Optional<UserGenre> findById(Long id);
+@Repository
+public interface BookRepository  extends JpaRepository<Book, Long> {
 
-    void save(Book b);
+    @Query(value = "select b from Book b where b.id = ?1")
+    Optional<Book> findById(Long id);
 }

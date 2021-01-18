@@ -117,7 +117,7 @@ public class UserController {
     public @ResponseBody Boolean publishBook() {
         identityService.setAuthenticatedUserId("guest");
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
-        runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
+        runtimeService.setVariable(pi.getProcessInstanceId(), "loggedInWriter", "milos.pantic11996");
 
 
         System.out.println("PUBLISH STARTED");
@@ -138,8 +138,6 @@ public class UserController {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
 
-        runtimeService.setVariable(processInstanceId, "loggedInWriter", "guest");
-
 
         try {
             formService.submitTaskForm(taskId, map);
@@ -150,10 +148,10 @@ public class UserController {
         return new ResponseEntity<> (HttpStatus.OK);
     }
 
-    @PostMapping(path = "/approve/{taskId}", produces = "application/json")
+    @PostMapping(path = "/review/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> approveReview(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
         try {
-            System.out.println(">> APPROVE TASK: ");
+            System.out.println(">> REVIEW TASK: ");
             System.out.println(data);
             HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                     .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
@@ -161,7 +159,7 @@ public class UserController {
             Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
             String processInstanceId = task.getProcessInstanceId();
 
-            runtimeService.setVariable(processInstanceId, "editor", "guest");
+            runtimeService.setVariable(processInstanceId, "editor", "editor");
 
 
             try {
@@ -180,7 +178,7 @@ public class UserController {
 
     @PostMapping(path = "/explanation/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> createExplanation(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
-
+        identityService.setAuthenticatedUserId("guest");
         System.out.println(">> SUBMIT TASK: ");
         System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
@@ -192,7 +190,7 @@ public class UserController {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         String processInstanceId = task.getProcessInstanceId();
 
-        runtimeService.setVariable(processInstanceId, "loggedInWriter", "guest");
+        runtimeService.setVariable(processInstanceId, "editor", "editor");
 
 
         try {

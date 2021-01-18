@@ -12,12 +12,15 @@ import javax.persistence.*;
 @Setter
 public class Book {
 
-    public Book(String title2, String synopsis2, String genre2, User u) {
+    public Book(String title2, String synopsis2, String genre2, User u, int status) {
         this.title = title2;
         this.synopsis = synopsis2;
         this.genre = genre2;
         this.user = u;
-	}
+        this.status = 0;
+    }
+    
+    public Book() {}
 
 	@Id
     @Column(name = "id", nullable = false)
@@ -33,6 +36,14 @@ public class Book {
     @Column(name = "genre", length = 512, nullable = false)
     private String genre;
 
-    @ ManyToOne
+    @Column(name = "status", length = 512, nullable = false)
+    private Integer status;
+
+    @ManyToOne
     private User user;
+
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 }
