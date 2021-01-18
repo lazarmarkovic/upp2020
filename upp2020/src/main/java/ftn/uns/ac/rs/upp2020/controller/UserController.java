@@ -3,7 +3,11 @@ package ftn.uns.ac.rs.upp2020.controller;
 import ftn.uns.ac.rs.upp2020.dto.*;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import org.camunda.bpm.engine.*;
+<<<<<<< HEAD
 import org.camunda.bpm.engine.impl.identity.Authentication;
+=======
+import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
+>>>>>>> master
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,6 +53,31 @@ public class UserController {
         return true;
     }
 
+<<<<<<< HEAD
+=======
+
+    @GetMapping(path="/confirm-email/{processId}/{confCode}", produces = "application/json")
+    public ResponseEntity<?> EmailVerification(
+            @PathVariable String processId,
+            @PathVariable String confCode) {
+
+        runtimeService.setVariable(
+                processId,
+                "confirmationEmailCode",
+                confCode);
+
+        MessageCorrelationResult messageCorrelationResult =
+                runtimeService
+                    .createMessageCorrelation("CatchConfirmationEmailMessage")
+                    .processInstanceId(processId)
+                    .correlateWithResult();
+
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    
+    /* Generic APIs */
+>>>>>>> master
     @PostMapping(path = "/submit/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> submit(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
 
@@ -77,11 +107,14 @@ public class UserController {
             username = this.tokenUtils.getUsernameFromToken(authToken);
         }
 
-        List<Task> tasks = taskService.createTaskQuery().taskAssignee(username).list();
-        List<TaskDTO> taskDTOs = tasks.stream().map(t -> {
-            String taskName = t.getName().split(" ")[0];
-            return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName);
-        }).collect(Collectors.toList());
+        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(t -> {
+                    String taskName = t.getName().split(" ")[0];
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
+                })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
+                .collect(Collectors.toList());
 
         return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
     }

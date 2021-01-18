@@ -2,6 +2,8 @@ package ftn.uns.ac.rs.upp2020.dto;
 
 import lombok.*;
 
+import java.util.Date;
+
 
 @Getter
 @Setter
@@ -12,5 +14,6 @@ public class TaskDTO {
     String taskId;
     String name;
     String assignee;
-    String name_id;
+    String task;
+    Date creationTime;
 }

@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-6">
+
+      <div class="card-body" *ngIf="formDTO['readonlyFields'] != undefined">
+        <table class="table">
+          <tbody>
+          <tr *ngFor="let rf of formDTO['readonlyFields']">
+            <th *ngIf="rf.list == true"  rowspan="o.value.length"> {{rf.name}} </th>
+
+
+            <th *ngIf="rf.list == false"> {{rf.name}} </th>
+            <td *ngIf="rf.list == false ; else printList"> {{rf.value}}</td>
+
+            <ng-template #printList>
+              <table>
+                <tr *ngFor="let i of rf.value">
+                  <td> {{i}}</td>
+                </tr>
+              </table>
+            </ng-template>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <form class="form-group" [formGroup]="regUserForm" (ngSubmit)="onSubmit()">
+        <div *ngFor="let field of formDTO['formFields']">
+          <label for={{field.id}} *ngIf="field.type.name !='string'">{{field.label}}</label>
+
+          <input type="text" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
+                 class="form-control"
+                 *ngIf="field.type.name=='string' && field.id != 'password' && field.id != 'pdf'">
+          <!--upload file; treba jos neke stvari dodati -->
+
+          <input type="password" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
+                 class="form-control" *ngIf="field.id=='password'">
+
+          <input type="checkbox" formControlName={{field.id}} ngModel class="form-control"
+                 *ngIf="field.type.name=='boolean'">
+          <input type="number" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
+                 class="form-control" *ngIf="field.type.name=='long'">
+
+          <select multiple formControlName={{field.id}} *ngIf="field.type.name=='multiselectGenre'"
+                  class="form-control">
+            <option *ngFor="let val of genres" value={{val}}>
+              {{field.type.values[val]}}
+            </option>
+          </select>
+          <br>
+        </div>
+
+        <button type="submit" class="btn btn-primary"> Submit </button>
+      </form>
+    </div>
+    <div></div>
+  </div>
+</div>

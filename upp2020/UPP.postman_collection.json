@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "49faa11e-cd64-4107-92c5-b14d1e21564d",
+		"name": "UPP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "general",
+			"item": [
+				{
+					"name": "(Auth) login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"pera\",\r\n    \"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Task) get tasks",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Auth) get auth user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXJhIiwiY3JlYXRlZCI6MTYxMDg5NzAyNDI3MCwicm9sZXMiOlt7ImF1dGhvcml0eSI6IlJFQURFUiJ9XSwiZXhwIjoxNjI4ODk3MDI0fQ.hrIXowUgEKN8EzbPEmJph9A6bRbIc9-Sq1NWYR-tgOAV9qMdoN8D4hBQFrvEcjOj0jyAk8VJ715EjIeV0mDKpg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/authUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"authUser"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "register author process",
+			"item": [
+				{
+					"name": "(RAP) 1. start register author process",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/start-author-registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"start-author-registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(RAP) 2. get submit form html",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/api/task/c2171ee2-4923-11eb-b3af-4cbb58327120/rendered-form",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"task",
+								"c2171ee2-4923-11eb-b3af-4cbb58327120",
+								"rendered-form"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(RAP) 3. submit registration form",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"username\",\r\n        \"value\": \"mika\"\r\n    },\r\n    {\r\n        \"name\": \"password\",\r\n        \"value\": \"123456\"\r\n    },\r\n    {\r\n        \"name\": \"email\",\r\n        \"value\": \"lazar.kmarkovic@gmail.com\"\r\n    },\r\n    {\r\n        \"name\": \"firstName\",\r\n        \"value\": \"Mika\"\r\n    },\r\n    {\r\n        \"name\": \"lastName\",\r\n        \"value\": \"Mikic\"\r\n    },\r\n    {\r\n        \"name\": \"city\",\r\n        \"value\": \"Novi Sad\"\r\n    },\r\n    {\r\n        \"name\": \"country\",\r\n        \"value\": \"Srbija\"\r\n    },\r\n    {\r\n        \"name\": \"select_genres\",\r\n        \"value\": [\r\n            \"FILOZOFIJA\",\r\n            \"UMETNOST\"\r\n        ],\r\n        \"isList\": true\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/submit/c00335db-4971-11eb-8771-4cbb58327120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"submit",
+								"c00335db-4971-11eb-8771-4cbb58327120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(RAP) 4. submit email confirmation code",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"code\",\r\n        \"value\": \"XYWcq\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/confirm-email/bffec8ff-4971-11eb-8771-4cbb58327120/f98dfa0af1dc62ea0be5c1b3ee45c7d0ad82ba68c5f52548f9705532c23be897",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"confirm-email",
+								"bffec8ff-4971-11eb-8771-4cbb58327120",
+								"f98dfa0af1dc62ea0be5c1b3ee45c7d0ad82ba68c5f52548f9705532c23be897"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
