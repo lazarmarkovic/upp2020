@@ -10,17 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MultiselectType extends SimpleFormFieldType {
+public class Multiselect extends SimpleFormFieldType {
 
-    public final static String TYPE_NAME = "multiselect";
+    public String TYPE_NAME = "multiselect";
 
     protected Map<String, String> values;
 
-    public MultiselectType() {
+    public Multiselect() {
         this.values = new HashMap<>();
     }
 
-    public MultiselectType(Map<String, String> values) {
+    public Multiselect(Map<String, String> values) {
         this.values = values;
         System.out.println(values);
     }

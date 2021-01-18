@@ -36,7 +36,7 @@
               <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="lastName" type="string">
+          <camunda:formField id="lastName" label="Last name" type="string">
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
@@ -54,7 +54,7 @@
               <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="select_genres" label="Favourite genres" type="multiselect">
+          <camunda:formField id="select_genres" label="Favourite genres" type="multiselectGenre">
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.SelectGenresValidator" />
@@ -128,6 +128,10 @@ if(formFields!=null){
   <bpmn:message id="Message_1vk9y39" name="CatchConfirmationEmailMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author_registration">
+      <bpmndi:BPMNEdge id="Flow_1gpqfl9_di" bpmnElement="Flow_1gpqfl9">
+        <di:waypoint x="480" y="360" />
+        <di:waypoint x="480" y="432" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_086uokj_di" bpmnElement="Flow_086uokj">
         <di:waypoint x="480" y="228" />
         <di:waypoint x="480" y="280" />
@@ -170,10 +174,6 @@ if(formFields!=null){
         <di:waypoint x="300" y="320" />
         <di:waypoint x="300" y="360" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1gpqfl9_di" bpmnElement="Flow_1gpqfl9">
-        <di:waypoint x="480" y="360" />
-        <di:waypoint x="480" y="432" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="282" y="82" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -189,6 +189,9 @@ if(formFields!=null){
       <bpmndi:BPMNShape id="Activity_1am3shl_di" bpmnElement="Activity_1rcypuq">
         <dc:Bounds x="430" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05yq2l7_di" bpmnElement="Activity_1teqokl">
+        <dc:Bounds x="430" y="280" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_09il53q_di" bpmnElement="Gateway_09il53q" isMarkerVisible="true">
         <dc:Bounds x="275" y="155" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -197,9 +200,6 @@ if(formFields!=null){
         <bpmndi:BPMNLabel>
           <dc:Bounds x="505" y="196" width="90" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05yq2l7_di" bpmnElement="Activity_1teqokl">
-        <dc:Bounds x="430" y="280" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1j5a9st_di" bpmnElement="Event_1j5a9st">
         <dc:Bounds x="462" y="432" width="36" height="36" />

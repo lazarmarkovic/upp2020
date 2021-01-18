@@ -52,7 +52,7 @@ public class UserController {
     }
 
 
-    @GetMapping(path="/confirm-email/{processId}/{confCode}", consumes = "application/json")
+    @GetMapping(path="/confirm-email/{processId}/{confCode}", produces = "application/json")
     public ResponseEntity<?> EmailVerification(
             @PathVariable String processId,
             @PathVariable String confCode) {

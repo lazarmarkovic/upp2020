@@ -9,6 +9,7 @@ import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 
 import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
 import ftn.uns.ac.rs.upp2020.service.UserService;
+import ftn.uns.ac.rs.upp2020.service.UserServiceImpl;
 import org.camunda.bpm.engine.IdentityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -50,13 +50,11 @@ public class AuthenticationController {
     private IdentityService identityService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
     private ModelMapper modelMapper;
 
-    @Autowired
-    private UserService userService;
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -71,7 +69,7 @@ public class AuthenticationController {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(loginDto.getUsername());
                 String tokenValue = this.tokenUtils.generateToken(userDetails);
                 token.setToken(tokenValue);
-                User u = this.userRepository.findByUsername(loginDto.getUsername());
+                User u = this.userService.findByUsername(loginDto.getUsername());
                 token.setRole(u.getRole());
 
                 Authentication auth = this.authenticationManager.authenticate(

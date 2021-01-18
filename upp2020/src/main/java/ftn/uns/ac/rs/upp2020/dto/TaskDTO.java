@@ -14,6 +14,6 @@ public class TaskDTO {
     String taskId;
     String name;
     String assignee;
-    String name_id;
+    String task;
     Date creationTime;
 }
