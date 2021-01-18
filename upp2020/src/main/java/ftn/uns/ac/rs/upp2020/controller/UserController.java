@@ -3,11 +3,8 @@ package ftn.uns.ac.rs.upp2020.controller;
 import ftn.uns.ac.rs.upp2020.dto.*;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import org.camunda.bpm.engine.*;
-<<<<<<< HEAD
 import org.camunda.bpm.engine.impl.identity.Authentication;
-=======
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
->>>>>>> master
 import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,8 +50,6 @@ public class UserController {
         return true;
     }
 
-<<<<<<< HEAD
-=======
 
     @GetMapping(path="/confirm-email/{processId}/{confCode}", produces = "application/json")
     public ResponseEntity<?> EmailVerification(
@@ -77,7 +72,6 @@ public class UserController {
     
     
     /* Generic APIs */
->>>>>>> master
     @PostMapping(path = "/submit/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> submit(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
 
