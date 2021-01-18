@@ -54,7 +54,7 @@
               <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.NameValidator" />
             </camunda:validation>
           </camunda:formField>
-          <camunda:formField id="select_genres" label="Favourite genres" type="multiselectGenre">
+          <camunda:formField id="selectGenres" label="Favourite genres" type="multiselectGenre">
             <camunda:validation>
               <camunda:constraint name="required" />
               <camunda:constraint name="validator" config="ftn.uns.ac.rs.upp2020.validators.SelectGenresValidator" />
@@ -68,7 +68,7 @@ genres= task.getExecution().getVariable("allGenres");
 formFields = taskFormData.getFormFields();
 if(formFields!=null){
    for(field in formFields){
-       if( field.getId() == "select_genres"){
+       if( field.getId() == "selectGenres"){
            items = field.getType().getValues();
            for(s in genres){
                items.put(s.getCode(),s.getName());
@@ -105,7 +105,7 @@ if(formFields!=null){
     <bpmn:sequenceFlow id="Flow_1xx3h7w" sourceRef="Activity_1rcypuq" targetRef="Event_0mb6oqx" />
     <bpmn:serviceTask id="Activity_1teqokl" name="process email confirmation code" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg.ProcessEmailConfirmationCodeDelegate">
       <bpmn:incoming>Flow_086uokj</bpmn:incoming>
-      <bpmn:outgoing>Flow_1gpqfl9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ahrknn</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_09il53q">
       <bpmn:incoming>Flow_1ig0yr3</bpmn:incoming>
@@ -120,21 +120,21 @@ if(formFields!=null){
       <bpmn:messageEventDefinition id="MessageEventDefinition_1frru96" messageRef="Message_1vk9y39" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_086uokj" sourceRef="Event_0mb6oqx" targetRef="Activity_1teqokl" />
-    <bpmn:endEvent id="Event_1j5a9st">
-      <bpmn:incoming>Flow_1gpqfl9</bpmn:incoming>
+    <bpmn:sequenceFlow id="Flow_0ahrknn" sourceRef="Activity_1teqokl" targetRef="Event_10rnoha" />
+    <bpmn:endEvent id="Event_10rnoha">
+      <bpmn:incoming>Flow_0ahrknn</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1gpqfl9" sourceRef="Activity_1teqokl" targetRef="Event_1j5a9st" />
   </bpmn:process>
   <bpmn:message id="Message_1vk9y39" name="CatchConfirmationEmailMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author_registration">
-      <bpmndi:BPMNEdge id="Flow_1gpqfl9_di" bpmnElement="Flow_1gpqfl9">
-        <di:waypoint x="480" y="360" />
-        <di:waypoint x="480" y="432" />
+      <bpmndi:BPMNEdge id="Flow_0ahrknn_di" bpmnElement="Flow_0ahrknn">
+        <di:waypoint x="300" y="840" />
+        <di:waypoint x="300" y="922" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_086uokj_di" bpmnElement="Flow_086uokj">
-        <di:waypoint x="480" y="228" />
-        <di:waypoint x="480" y="280" />
+        <di:waypoint x="300" y="728" />
+        <di:waypoint x="300" y="760" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ezhsk9_di" bpmnElement="Flow_0ezhsk9">
         <di:waypoint x="300" y="205" />
@@ -145,16 +145,14 @@ if(formFields!=null){
         <di:waypoint x="300" y="155" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1xx3h7w_di" bpmnElement="Flow_1xx3h7w">
-        <di:waypoint x="480" y="160" />
-        <di:waypoint x="480" y="192" />
+        <di:waypoint x="300" y="650" />
+        <di:waypoint x="300" y="692" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1oehd49_di" bpmnElement="Flow_1oehd49">
-        <di:waypoint x="325" y="500" />
-        <di:waypoint x="390" y="500" />
-        <di:waypoint x="390" y="120" />
-        <di:waypoint x="430" y="120" />
+        <di:waypoint x="300" y="525" />
+        <di:waypoint x="300" y="570" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="353" y="478" width="22" height="14" />
+          <dc:Bounds x="304" y="545" width="22" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_19ua91z_di" bpmnElement="Flow_19ua91z">
@@ -187,22 +185,22 @@ if(formFields!=null){
         <dc:Bounds x="275" y="475" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1am3shl_di" bpmnElement="Activity_1rcypuq">
-        <dc:Bounds x="430" y="80" width="100" height="80" />
+        <dc:Bounds x="250" y="570" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_05yq2l7_di" bpmnElement="Activity_1teqokl">
-        <dc:Bounds x="430" y="280" width="100" height="80" />
+        <dc:Bounds x="250" y="760" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_09il53q_di" bpmnElement="Gateway_09il53q" isMarkerVisible="true">
         <dc:Bounds x="275" y="155" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1qht2cg_di" bpmnElement="Event_0mb6oqx">
-        <dc:Bounds x="462" y="192" width="36" height="36" />
+        <dc:Bounds x="282" y="692" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="505" y="196" width="90" height="27" />
+          <dc:Bounds x="182" y="696.5" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1j5a9st_di" bpmnElement="Event_1j5a9st">
-        <dc:Bounds x="462" y="432" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_10rnoha_di" bpmnElement="Event_10rnoha">
+        <dc:Bounds x="282" y="922" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

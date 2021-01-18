@@ -43,7 +43,7 @@ public class SendConfirmationEmailDelegate implements JavaDelegate {
 
         String processId = execution.getProcessInstanceId();
         String emailConfLink =
-                String.format("http://localhost:8080/user/confirm-email/%s/%s", processId, sha256hex);
+                String.format("http://localhost:8080/users/confirm-email/%s/%s", processId, sha256hex);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(u.getEmail());

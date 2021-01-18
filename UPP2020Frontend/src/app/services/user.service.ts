@@ -10,10 +10,7 @@ export class UserService {
   constructor(private httpClient: HttpClient) { }
 
   runRegistration(): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/user/start-author-registration');
+    return this.httpClient.get('http://localhost:8080/users/start-author-registration');
   }
 
-  submit(data: any, taskId: string): Observable<any> {
-    return this.httpClient.post('http://localhost:8080/user/submit/' + taskId, data);
-  }
 }

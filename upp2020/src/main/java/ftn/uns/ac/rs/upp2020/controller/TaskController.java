@@ -3,8 +3,12 @@ package ftn.uns.ac.rs.upp2020.controller;
 import ftn.uns.ac.rs.upp2020.domain.Genre;
 import ftn.uns.ac.rs.upp2020.dto.FormDTO;
 import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
+import ftn.uns.ac.rs.upp2020.dto.TaskDTO;
+import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import ftn.uns.ac.rs.upp2020.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.camunda.bpm.engine.*;
@@ -14,39 +18,91 @@ import org.camunda.bpm.engine.form.TaskFormData;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 @RestController
+@RequestMapping("/tasks")
 public class TaskController {
 
     private final IdentityService identityService;
     private final RuntimeService runtimeService;
     private final RepositoryService repositoryService;
+    private final TokenUtils tokenUtils;
 
     private final TaskService taskService;
     private final FormService formService;
     private final GenreService genreService;
 
 
+
     @Autowired
     public TaskController(IdentityService identityService,
                           RuntimeService runtimeService,
                           RepositoryService repositoryService,
+                          TokenUtils tokenUtils,
                           TaskService taskService,
                           FormService formService,
                           GenreService genreService) {
         this.identityService = identityService;
         this.runtimeService = runtimeService;
         this.repositoryService = repositoryService;
+        this.tokenUtils = tokenUtils;
         this.taskService = taskService;
         this.formService = formService;
         this.genreService = genreService;
     }
 
+    /* Generic APIs */
+    @PostMapping(path = "/submit/{taskId}", produces = "application/json")
+    public @ResponseBody
+    ResponseEntity<?> submit(
+            @RequestBody List<InputDataDTO> data,
+            @PathVariable String taskId ){
 
-    @GetMapping(path="/task/{taskId}/form", produces = "application/json")
+        System.out.println(">> SUBMIT TASK: ");
+        System.out.println(data);
+        HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
+                .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+
+        try {
+            formService.submitTaskForm(taskId, map);
+        }catch (Exception e){
+            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<> (HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> get(HttpServletRequest http){
+        String authToken = http.getHeader("X-Auth-Token");
+
+        String username = "guest";
+        if (authToken != null){
+            username = this.tokenUtils.getUsernameFromToken(authToken);
+        }
+
+        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(t -> {
+                    String taskName = t.getName().split(" ")[0];
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
+                })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path="/{taskId}/form", produces = "application/json")
     public @ResponseBody FormDTO getFrom(@PathVariable String taskId) {
         Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
         TaskFormData tfd = formService.getTaskFormData(task.getId());
@@ -85,7 +141,7 @@ public class TaskController {
             }
         }
 
-        return new FormDTO(task.getId(), task.getProcessInstanceId(), properties, readonlyFields);
+        return new FormDTO(task.getName() ,task.getId(), task.getProcessInstanceId(), properties, readonlyFields);
     }
 
 }

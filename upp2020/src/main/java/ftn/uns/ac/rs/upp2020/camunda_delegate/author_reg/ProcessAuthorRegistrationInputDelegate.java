@@ -49,7 +49,7 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
         String lastName = (String) execution.getVariable("lastName");
         String city = (String) execution.getVariable("city");
         String country = (String) execution.getVariable("country");
-        List<String> genres = (List<String>) execution.getVariable("select_genres");
+        List<String> genres = (List<String>) execution.getVariable("selectGenres");
 
 
         User findUser = identityService.createUserQuery().userId(username).singleResult();

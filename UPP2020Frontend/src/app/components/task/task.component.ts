@@ -3,6 +3,7 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {UserService} from '../../services/user.service';
+import {ToastrService} from 'ngx-toastr';
 
 
 @Component({
@@ -19,9 +20,9 @@ export class TaskComponent implements OnInit {
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService,
               private formBuilder: FormBuilder,
-              private taskService: TaskService) {}
+              private taskService: TaskService,
+              private tService: ToastrService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -73,11 +74,12 @@ export class TaskComponent implements OnInit {
 
     // @ts-ignore
     const {taskId} = this.formDTO;
-    this.userService
+    this.taskService
       .submit(values, taskId)
       .subscribe(
       res => {
         console.log(res);
+        this.tService.success('Form "' + this.formDTO.formName + '" is submitted.');
         this.router.navigate(['/tasks']);
       },
       err => {
@@ -86,5 +88,7 @@ export class TaskComponent implements OnInit {
       }
     );
   }
+
+
 
 }

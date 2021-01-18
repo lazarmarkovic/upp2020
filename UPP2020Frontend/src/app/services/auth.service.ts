@@ -18,6 +18,6 @@ export class AuthService {
   }
 
   getAuthUser(): Observable<any> {
-    return this.httpClient.get('http://localhost:8080/authUser');
+    return this.httpClient.get('http://localhost:8080/auth-user');
   }
 }

@@ -4,12 +4,10 @@ import ftn.uns.ac.rs.upp2020.dto.LoginDTO;
 import ftn.uns.ac.rs.upp2020.dto.TokenDTO;
 import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.dto.UserDTO;
-import ftn.uns.ac.rs.upp2020.repository.UserRepository;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 
 import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
 import ftn.uns.ac.rs.upp2020.service.UserService;
-import ftn.uns.ac.rs.upp2020.service.UserServiceImpl;
 import org.camunda.bpm.engine.IdentityService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,27 +32,33 @@ import java.util.stream.Collectors;
 
 @RestController
 public class AuthenticationController {
-    @Autowired
-    AuthenticationManager authenticationManager;
+
+    private final AuthenticationManager authenticationManager;
+    private final AuthenticationService authenticationService;
+    private final UserDetailsService userDetailsService;
+    private final TokenUtils tokenUtils;
+    private final IdentityService identityService;
+    private final UserService userService;
+    private final ModelMapper modelMapper;
+
 
     @Autowired
-    private AuthenticationService authenticationService;
-
-    @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private TokenUtils tokenUtils;
-
-    @Autowired
-    private IdentityService identityService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
+    public AuthenticationController(
+            AuthenticationManager authenticationManager,
+            AuthenticationService authenticationService,
+            UserDetailsService userDetailsService,
+            TokenUtils tokenUtils,
+            IdentityService identityService,
+            UserService userService,
+            ModelMapper modelMapper) {
+        this.authenticationManager = authenticationManager;
+        this.authenticationService = authenticationService;
+        this.userDetailsService = userDetailsService;
+        this.tokenUtils = tokenUtils;
+        this.identityService = identityService;
+        this.userService = userService;
+        this.modelMapper = modelMapper;
+    }
 
 
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -89,7 +93,7 @@ public class AuthenticationController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/authUser")
+    @RequestMapping(method = RequestMethod.GET, value = "/auth-user")
     public ResponseEntity<?> getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
