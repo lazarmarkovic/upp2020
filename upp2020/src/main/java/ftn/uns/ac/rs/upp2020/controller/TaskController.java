@@ -39,7 +39,6 @@ public class TaskController {
     private final GenreService genreService;
 
 
-
     @Autowired
     public TaskController(IdentityService identityService,
                           RuntimeService runtimeService,

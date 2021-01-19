@@ -6,10 +6,10 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "aa__works")
+@Table(name = "aa__previous_works")
 @Getter
 @Setter
-public class Work {
+public class PreviousWork {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
