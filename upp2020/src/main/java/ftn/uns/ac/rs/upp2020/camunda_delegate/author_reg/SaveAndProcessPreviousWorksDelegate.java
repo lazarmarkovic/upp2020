@@ -3,6 +3,7 @@ package ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg;
 
 import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.domain.PreviousWork;
+import ftn.uns.ac.rs.upp2020.dto.FileHolderDTO;
 import ftn.uns.ac.rs.upp2020.repository.PreviousWorkRepository;
 import ftn.uns.ac.rs.upp2020.service.UserService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
@@ -29,12 +30,12 @@ public class SaveAndProcessPreviousWorksDelegate  implements JavaDelegate {
 
         String username = (String) execution.getVariable("username");
         User user = userService.findByUsername(username);
-        List<byte[]> pdfFiles = (List<byte[]>) execution.getVariable("files");
+        List<FileHolderDTO> pdfFiles = (List<FileHolderDTO>) execution.getVariable("files");
 
         pdfFiles.forEach((f -> {
             PreviousWork previousWork = new PreviousWork();
-            previousWork.setName("Neki fajl");
-            previousWork.setFile(f);
+            previousWork.setName(f.getFileName());
+            previousWork.setFile(f.getFile());
             previousWork.setUser(user);
             previousWorkRepository.save(previousWork);
         }));

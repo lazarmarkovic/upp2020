@@ -16,7 +16,10 @@
             <ng-template #printList>
               <table>
                 <tr *ngFor="let i of rf.value">
-                  <td> {{i}}</td>
+                  <td *ngIf="i.toString().includes('http') == false"> {{i}}</td>
+                  <td *ngIf="i.toString().includes('http') == true">
+                    <a href="{{i}}">{{i}}</a>
+                  </td>
                 </tr>
               </table>
             </ng-template>

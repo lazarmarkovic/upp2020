@@ -1,6 +1,7 @@
 package ftn.uns.ac.rs.upp2020.controller;
 
 import ftn.uns.ac.rs.upp2020.domain.Genre;
+import ftn.uns.ac.rs.upp2020.dto.FileHolderDTO;
 import ftn.uns.ac.rs.upp2020.dto.FormDTO;
 import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
 import ftn.uns.ac.rs.upp2020.dto.TaskDTO;
@@ -149,11 +150,9 @@ public class TaskController {
         String processInstance = task.getProcessInstanceId();
 
         List<MultipartFile> fileList = new ArrayList<>(Arrays.asList(files));
-        List<byte[]> bytesList = fileList.stream().map((f) -> {
+        List<FileHolderDTO> bytesList = fileList.stream().map((f) -> {
             try {
-                //TODO: Extract file names
-                f.getName();
-                return f.getBytes();
+                return new FileHolderDTO(f.getOriginalFilename(), f.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
 
