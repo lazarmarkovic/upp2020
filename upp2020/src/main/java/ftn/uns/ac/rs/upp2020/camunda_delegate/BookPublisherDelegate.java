@@ -49,7 +49,7 @@ public class BookPublisherDelegate implements JavaDelegate {
     
             Book b = new Book(title, synopsis, genre, u, 0);
     
-            bookRepository.save(b);
+            Book book = bookRepository.save(b);
 
             System.out.println(execution.getProcessInstanceId());
 
@@ -60,6 +60,8 @@ public class BookPublisherDelegate implements JavaDelegate {
             runtimeService.setVariable(execution.getProcessInstanceId(), "editor", "editor");
 
             runtimeService.setVariable(execution.getProcessInstanceId(), "approve", approve);
+
+            runtimeService.setVariable(execution.getProcessInstanceId(), "book_id", book.getId());
     
             System.out.println(writer);
         } catch (Exception e ) {

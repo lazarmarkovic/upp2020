@@ -113,9 +113,53 @@ public class UserController {
         return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
     }
 
+
+    @GetMapping(path = "/editor-tasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getEditorTasks(HttpServletRequest http) {
+        String authToken = http.getHeader("X-Auth-Token");
+
+        String username = "editor";
+        if (authToken != null) {
+            username = this.tokenUtils.getUsernameFromToken(authToken);
+        }
+
+        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(t -> {
+                    String taskName = t.getName().split(" ")[0];
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
+                })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
+    }
+
+
+    @GetMapping(path = "/writer-tasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getWriterTasks(HttpServletRequest http) {
+        String authToken = http.getHeader("X-Auth-Token");
+
+        String username = "milos.pantic11996";
+        if (authToken != null) {
+            username = this.tokenUtils.getUsernameFromToken(authToken);
+        }
+
+        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(t -> {
+                    String taskName = t.getName().split(" ")[0];
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
+                })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
+    }
+
     @GetMapping(path = "/publish-book", produces = "application/json")
     public @ResponseBody Boolean publishBook() {
-        identityService.setAuthenticatedUserId("guest");
+        identityService.setAuthenticatedUserId("milos.pantic11996");
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
         runtimeService.setVariable(pi.getProcessInstanceId(), "loggedInWriter", "milos.pantic11996");
 
@@ -135,8 +179,8 @@ public class UserController {
         System.out.println(taskId);
         System.out.println(runtimeService.toString());
 
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
+        // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        // String processInstanceId = task.getProcessInstanceId();
 
 
         try {
@@ -151,16 +195,14 @@ public class UserController {
     @PostMapping(path = "/review/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> approveReview(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
         try {
+            identityService.setAuthenticatedUserId("guest");
             System.out.println(">> REVIEW TASK: ");
             System.out.println(data);
             HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                     .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
-            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-            String processInstanceId = task.getProcessInstanceId();
-
-            runtimeService.setVariable(processInstanceId, "editor", "editor");
-
+            // Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+            // String processInstanceId = task.getProcessInstanceId();
 
             try {
                 formService.submitTaskForm(taskId, map);
@@ -192,6 +234,54 @@ public class UserController {
 
         runtimeService.setVariable(processInstanceId, "editor", "editor");
 
+
+        try {
+            formService.submitTaskForm(taskId, map);
+        }catch (Exception e){
+            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<> (HttpStatus.OK);
+    }
+
+
+    @PostMapping(path = "/send-full-transcript/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<?> uploadTranscript(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
+        identityService.setAuthenticatedUserId("guest");
+        System.out.println(">> UPLOAD TRANSCRIPT: ");
+        System.out.println(data);
+        HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
+                .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "loggedInWriter", "milos.pantic11996");
+
+
+        try {
+            formService.submitTaskForm(taskId, map);
+        }catch (Exception e){
+            return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
+        }
+
+        return new ResponseEntity<> (HttpStatus.OK);
+    }
+
+
+    
+    @PostMapping(path = "/read-transcript/{taskId}", produces = "application/json")
+    public @ResponseBody ResponseEntity<?> reviewTranscript(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
+        identityService.setAuthenticatedUserId("guest");
+        System.out.println(">> REVIEW TRANSCRIPT: ");
+        System.out.println(data);
+        HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
+                .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstanceId = task.getProcessInstanceId();
+
+        runtimeService.setVariable(processInstanceId, "editor", "editor");
 
         try {
             formService.submitTaskForm(taskId, map);

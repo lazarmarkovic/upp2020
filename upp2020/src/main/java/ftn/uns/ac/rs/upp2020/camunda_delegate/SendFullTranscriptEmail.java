@@ -5,6 +5,8 @@ import java.util.List;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,6 +19,9 @@ public class SendFullTranscriptEmail implements JavaDelegate{
     
     @Autowired 
     UserRepository userRepository;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
     
     @Override
     @Transactional
@@ -24,15 +29,15 @@ public class SendFullTranscriptEmail implements JavaDelegate{
 
         System.out.println("HERE");
 
-        List<User> users = userRepository.findAllActiveUsers();
+        String writer = (String) execution.getVariable("loggedInWriter");
+        String email = writer + "@gmail.com";
 
-        System.out.println(users.size());
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(email);
+        mailMessage.setSubject("Please upload your full transcript");
+        mailMessage.setText("Your application has been considered and we would like to your full transcript");
 
-        // mailMessage.setTo();
-        // mailMessage.setSubject("UPP account verification code");
-        // mailMessage.setText( +  ",\n Please verify your account.\n Your activation code is: " + hashCode);
-
-        // javaMailSender.send(mailMessage);
+        javaMailSender.send(mailMessage);
     }
 
 

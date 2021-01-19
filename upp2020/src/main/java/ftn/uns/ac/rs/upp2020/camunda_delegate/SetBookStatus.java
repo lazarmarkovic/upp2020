@@ -28,6 +28,7 @@ public class SetBookStatus implements JavaDelegate {
 
             if(b.isEmpty()) {
                 System.out.println("Invalid book id");
+                return;
             }
 
             Book book = b.get();

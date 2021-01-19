@@ -27,7 +27,6 @@ public class RejectionNotifierEmail implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        // TODO Auto-generated method stub
         String writer = (String) execution.getVariable("loggedInWriter");
         String explanation = (String) execution.getVariable("explanation_field");
         String email = writer + "@gmail.com";

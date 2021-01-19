@@ -18,6 +18,7 @@ public class Book {
         this.genre = genre2;
         this.user = u;
         this.status = 0;
+        this.transcript = "";
     }
     
     public Book() {}
@@ -38,6 +39,10 @@ public class Book {
 
     @Column(name = "status", length = 512, nullable = false)
     private Integer status;
+
+    
+    @Column(name = "transcript", length = 512, nullable = true)
+    private String transcript;
 
     @ManyToOne
     private User user;
