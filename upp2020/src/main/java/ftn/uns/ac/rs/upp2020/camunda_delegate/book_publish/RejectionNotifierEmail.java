@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.book_publish;
 
 import java.util.Optional;
 
@@ -27,7 +27,7 @@ public class RejectionNotifierEmail implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
-        String writer = (String) execution.getVariable("loggedInWriter");
+        String writer = (String) execution.getVariable("writer");
         String explanation = (String) execution.getVariable("explanation_field");
         String email = writer + "@gmail.com";
 

@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.book_publish;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;

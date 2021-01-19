@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.book_publish;
 
 import java.util.List;
 
@@ -29,7 +29,7 @@ public class SendFullTranscriptEmail implements JavaDelegate{
 
         System.out.println("HERE");
 
-        String writer = (String) execution.getVariable("loggedInWriter");
+        String writer = (String) execution.getVariable("writer");
         String email = writer + "@gmail.com";
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();

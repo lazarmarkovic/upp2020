@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.book_publish;
 
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.RuntimeService;
@@ -39,7 +39,7 @@ public class BookPublisherDelegate implements JavaDelegate {
     
             System.out.println("here");
     
-            String writer = (String) execution.getVariable("loggedInWriter");
+            String writer = (String) execution.getVariable("writer");
     
             System.out.println(writer);
     
@@ -52,12 +52,6 @@ public class BookPublisherDelegate implements JavaDelegate {
             Book book = bookRepository.save(b);
 
             System.out.println(execution.getProcessInstanceId());
-
-            runtimeService.setVariable(execution.getProcessInstanceId(), "title", title);
-            runtimeService.setVariable(execution.getProcessInstanceId(), "synopsis", synopsis);
-            runtimeService.setVariable(execution.getProcessInstanceId(), "genre", genre);
-
-            runtimeService.setVariable(execution.getProcessInstanceId(), "editor", "editor");
 
             runtimeService.setVariable(execution.getProcessInstanceId(), "approve", approve);
 

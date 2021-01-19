@@ -1,4 +1,4 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.book_publish;
 
 import java.util.Optional;
 

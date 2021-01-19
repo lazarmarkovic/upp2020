@@ -140,7 +140,7 @@ public class UserController {
     public @ResponseBody ResponseEntity<List<TaskDTO>> getWriterTasks(HttpServletRequest http) {
         String authToken = http.getHeader("X-Auth-Token");
 
-        String username = "milos.pantic11996";
+        String username = "writer";
         if (authToken != null) {
             username = this.tokenUtils.getUsernameFromToken(authToken);
         }
@@ -159,9 +159,9 @@ public class UserController {
 
     @GetMapping(path = "/publish-book", produces = "application/json")
     public @ResponseBody Boolean publishBook() {
-        identityService.setAuthenticatedUserId("milos.pantic11996");
+        identityService.setAuthenticatedUserId("writer");
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
-        runtimeService.setVariable(pi.getProcessInstanceId(), "loggedInWriter", "milos.pantic11996");
+        runtimeService.setVariable(pi.getProcessInstanceId(), "writer", "writer");
 
 
         System.out.println("PUBLISH STARTED");
@@ -170,9 +170,6 @@ public class UserController {
 
     @PostMapping(path = "/publish/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> publish(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
-        identityService.setAuthenticatedUserId("guest");
-        System.out.println(">> SUBMIT TASK: ");
-        System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
         
@@ -195,9 +192,6 @@ public class UserController {
     @PostMapping(path = "/review/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> approveReview(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
         try {
-            identityService.setAuthenticatedUserId("guest");
-            System.out.println(">> REVIEW TASK: ");
-            System.out.println(data);
             HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                     .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
@@ -220,9 +214,6 @@ public class UserController {
 
     @PostMapping(path = "/explanation/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> createExplanation(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
-        identityService.setAuthenticatedUserId("guest");
-        System.out.println(">> SUBMIT TASK: ");
-        System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
         
@@ -247,16 +238,8 @@ public class UserController {
 
     @PostMapping(path = "/send-full-transcript/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> uploadTranscript(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
-        identityService.setAuthenticatedUserId("guest");
-        System.out.println(">> UPLOAD TRANSCRIPT: ");
-        System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
-
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
-
-        runtimeService.setVariable(processInstanceId, "loggedInWriter", "milos.pantic11996");
 
 
         try {
@@ -272,9 +255,6 @@ public class UserController {
     
     @PostMapping(path = "/read-transcript/{taskId}", produces = "application/json")
     public @ResponseBody ResponseEntity<?> reviewTranscript(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
-        identityService.setAuthenticatedUserId("guest");
-        System.out.println(">> REVIEW TRANSCRIPT: ");
-        System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
