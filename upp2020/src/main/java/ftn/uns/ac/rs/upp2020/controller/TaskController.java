@@ -21,10 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -148,14 +145,23 @@ public class TaskController {
 
 
     @PostMapping(value = "/{taskId}/upload")
-    public ResponseEntity fileUpload(@RequestParam("file") MultipartFile file, @PathVariable String taskId){
-        try{
-            Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-            String processInstance = task.getProcessInstanceId();
-            runtimeService.setVariable(processInstance, "file", file.getBytes());
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+    public ResponseEntity fileUpload(@RequestParam("files") MultipartFile[] files, @PathVariable String taskId){
+        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
+        String processInstance = task.getProcessInstanceId();
+
+        List<MultipartFile> fileList = new ArrayList<>(Arrays.asList(files));
+        List<byte[]> bytesList = fileList.stream().map((f) -> {
+            try {
+                //TODO: Extract file names
+                f.getName();
+                return f.getBytes();
+            } catch (IOException e) {
+                e.printStackTrace();
+
+                return null;
+            }
+        }).collect(Collectors.toList());
+        runtimeService.setVariable(processInstance, "files", bytesList);
 
         return new ResponseEntity(HttpStatus.OK);
     }

@@ -13,6 +13,7 @@ import { AppComponent } from './components/main/app.component';
 import { LoginComponent } from './components/login/login.component';
 import { TaskListComponent } from './components/task-list/task-list.component';
 
+
 /* Material design imports */
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +40,7 @@ import { TaskComponent } from './components/task/task.component';
     LoginComponent,
     NavigationComponent,
     TaskListComponent,
-    TaskComponent
+    TaskComponent,
   ],
   imports: [
     BrowserModule,

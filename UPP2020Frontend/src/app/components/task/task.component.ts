@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {UserService} from '../../services/user.service';
 import {ToastrService} from 'ngx-toastr';
+import {HttpEventType, HttpResponse} from '@angular/common/http';
 
 
 @Component({
@@ -17,6 +18,8 @@ export class TaskComponent implements OnInit {
 
   public regUserForm = new FormGroup({});
   public genres: any[] | undefined;
+
+  public selectedFiles = [];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
@@ -69,6 +72,7 @@ export class TaskComponent implements OnInit {
     const values: { name: string | number; value: any; }[] = [];
     // tslint:disable-next-line:forin
     for (const p in this.regUserForm.value) {
+      console.log(this.regUserForm.value);
       values.push({ name: p, value: this.regUserForm.value[p] });
     }
 
@@ -77,36 +81,26 @@ export class TaskComponent implements OnInit {
     this.taskService
       .submit(values, taskId)
       .subscribe(
-      res => {
-        console.log(res);
-        this.tService.success('Form "' + this.formDTO.formName + '" is submitted.');
-        this.router.navigate(['/tasks']);
+        res => {
+          console.log(res);
+          this.tService.success('Form "' + this.formDTO.formName + '" is submitted.');
+          this.router.navigate(['/tasks']);
+        },
+        err => {
+          alert('Error while submitting form:');
+          console.log(err);
+        }
+      );
+  }
+
+  uploadFiles(event: any): void {
+    this.taskService.uploadFiles(this.formDTO.taskId, event.target.files).subscribe(
+      response => {
+          console.log('UPLAODED');
+          this.tService.success('All files are uploaded', 'Success');
       },
       err => {
-        alert('Error while submitting form:');
         console.log(err);
-      }
-    );
+      });
   }
-
-  uploadFile(event: any): void{
-    const files = event.target.files;
-    //  let fileList: FileList = this.regUserForm.value.pdf;
-    //  alert(fileList);
-    const file = files[0];
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-
-    this.taskService.uploadFile(this.formDTO.taskId, formData).subscribe(
-      data => {
-        this.tService.success('Files uploaded!', 'Success');
-      },
-      err => {
-        console.log(err.error);
-
-      }
-    );
-  }
-
-
 }

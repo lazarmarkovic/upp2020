@@ -105,7 +105,7 @@ if(formFields!=null){
     <bpmn:sequenceFlow id="Flow_1xx3h7w" sourceRef="Activity_1rcypuq" targetRef="Event_0mb6oqx" />
     <bpmn:serviceTask id="Activity_1teqokl" name="process email confirmation code" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg.ProcessEmailConfirmationCodeDelegate">
       <bpmn:incoming>Flow_086uokj</bpmn:incoming>
-      <bpmn:outgoing>Flow_0ahrknn</bpmn:outgoing>
+      <bpmn:outgoing>Flow_17ruuam</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_09il53q">
       <bpmn:incoming>Flow_1ig0yr3</bpmn:incoming>
@@ -120,17 +120,40 @@ if(formFields!=null){
       <bpmn:messageEventDefinition id="MessageEventDefinition_1frru96" messageRef="Message_1vk9y39" />
     </bpmn:intermediateCatchEvent>
     <bpmn:sequenceFlow id="Flow_086uokj" sourceRef="Event_0mb6oqx" targetRef="Activity_1teqokl" />
-    <bpmn:sequenceFlow id="Flow_0ahrknn" sourceRef="Activity_1teqokl" targetRef="Event_10rnoha" />
-    <bpmn:endEvent id="Event_10rnoha">
-      <bpmn:incoming>Flow_0ahrknn</bpmn:incoming>
+    <bpmn:sequenceFlow id="Flow_17ruuam" sourceRef="Activity_1teqokl" targetRef="Activity_1p0waq2" />
+    <bpmn:userTask id="Activity_1p0waq2" name="submit previous works" camunda:assignee="${starter}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="pdfFiles" label="Submit at least 2 previus works" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_17ruuam</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ow1xx6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0ow1xx6" sourceRef="Activity_1p0waq2" targetRef="Activity_1o4gz75" />
+    <bpmn:serviceTask id="Activity_1o4gz75" name="save and process previous works" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg.SaveAndProcessPreviousWorksDelegate">
+      <bpmn:incoming>Flow_0ow1xx6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1kqwsd4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0vhj007">
+      <bpmn:incoming>Flow_1kqwsd4</bpmn:incoming>
     </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1kqwsd4" sourceRef="Activity_1o4gz75" targetRef="Event_0vhj007" />
   </bpmn:process>
   <bpmn:message id="Message_1vk9y39" name="CatchConfirmationEmailMessage" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="author_registration">
-      <bpmndi:BPMNEdge id="Flow_0ahrknn_di" bpmnElement="Flow_0ahrknn">
+      <bpmndi:BPMNEdge id="Flow_1kqwsd4_di" bpmnElement="Flow_1kqwsd4">
+        <di:waypoint x="300" y="1100" />
+        <di:waypoint x="300" y="1162" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ow1xx6_di" bpmnElement="Flow_0ow1xx6">
+        <di:waypoint x="300" y="960" />
+        <di:waypoint x="300" y="1020" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17ruuam_di" bpmnElement="Flow_17ruuam">
         <di:waypoint x="300" y="840" />
-        <di:waypoint x="300" y="922" />
+        <di:waypoint x="300" y="880" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_086uokj_di" bpmnElement="Flow_086uokj">
         <di:waypoint x="300" y="728" />
@@ -199,8 +222,14 @@ if(formFields!=null){
           <dc:Bounds x="182" y="696.5" width="90" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_10rnoha_di" bpmnElement="Event_10rnoha">
-        <dc:Bounds x="282" y="922" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_1kspwux_di" bpmnElement="Activity_1p0waq2">
+        <dc:Bounds x="250" y="880" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1h6sycb_di" bpmnElement="Activity_1o4gz75">
+        <dc:Bounds x="250" y="1020" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0vhj007_di" bpmnElement="Event_0vhj007">
+        <dc:Bounds x="282" y="1162" width="36" height="36" />
       </bpmndi:BPMNShape>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
