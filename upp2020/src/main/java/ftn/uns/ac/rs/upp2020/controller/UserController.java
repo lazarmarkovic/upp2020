@@ -162,6 +162,7 @@ public class UserController {
         identityService.setAuthenticatedUserId("writer");
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("Process_0qg34ld");
         runtimeService.setVariable(pi.getProcessInstanceId(), "writer", "writer");
+        runtimeService.setVariable(pi.getProcessInstanceId(), "editor", "editor");
 
 
         System.out.println("PUBLISH STARTED");
