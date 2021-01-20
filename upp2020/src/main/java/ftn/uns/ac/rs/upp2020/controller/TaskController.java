@@ -6,10 +6,10 @@ import ftn.uns.ac.rs.upp2020.dto.FileHolderDTO;
 import ftn.uns.ac.rs.upp2020.dto.FormDTO;
 import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
 import ftn.uns.ac.rs.upp2020.dto.TaskDTO;
-import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
 import ftn.uns.ac.rs.upp2020.service.GenreService;
+import ftn.uns.ac.rs.upp2020.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 @RestController
@@ -42,6 +43,7 @@ public class TaskController {
     private final TaskService taskService;
     private final FormService formService;
     private final GenreService genreService;
+    private final UserService userService;
 
 
     @Autowired
@@ -52,7 +54,8 @@ public class TaskController {
                           AuthenticationService authenticationService,
                           TaskService taskService,
                           FormService formService,
-                          GenreService genreService) {
+                          GenreService genreService,
+                          UserService userService) {
         this.identityService = identityService;
         this.runtimeService = runtimeService;
         this.repositoryService = repositoryService;
@@ -61,6 +64,7 @@ public class TaskController {
         this.taskService = taskService;
         this.formService = formService;
         this.genreService = genreService;
+        this.userService = userService;
     }
 
     /* Generic APIs */
@@ -144,11 +148,11 @@ public class TaskController {
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
 
             } else  if (fp.getTypeName().equals("multiselectPDF")) {
-                    System.out.println("Field type is: " + fp.getTypeName());
+                System.out.println("Field type is: " + fp.getTypeName());
                 String processInstanceId = task.getProcessInstanceId();
-                List<FileHolderDTO> works = ( List<FileHolderDTO>)runtimeService.getVariable(processInstanceId, "files");
-                List<String> values = works.stream().map((w) -> "http://localhost:8080/works/" + w.getFileName()).collect(Collectors.toList());
-
+                String username = (String) runtimeService.getVariable(processInstanceId, "username");
+                User user = userService.findByUsername(username);
+                List<String> values = user.getPreviousWorks().stream().map((w) -> "http://localhost:8080/works/" + w.getName()).collect(Collectors.toList());
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
             } else {
                 System.out.println("Nije usao. Field type is: " + fp.getTypeName());
@@ -166,15 +170,19 @@ public class TaskController {
         String processInstance = task.getProcessInstanceId();
 
         List<MultipartFile> fileList = new ArrayList<>(Arrays.asList(files));
+
+        System.out.println("---Uploaded files names: ");
         List<FileHolderDTO> bytesList = fileList.stream().map((f) -> {
             try {
+                System.out.println(f.getOriginalFilename());
                 return new FileHolderDTO(f.getOriginalFilename(), f.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();
-
                 return null;
             }
         }).collect(Collectors.toList());
+
+        runtimeService.removeVariable(processInstance, "files");
         runtimeService.setVariable(processInstance, "files", bytesList);
 
         return new ResponseEntity(HttpStatus.OK);

@@ -24,6 +24,10 @@ public class User implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<UserGenre> userGenres;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<PreviousWork> previousWorks;
+
     @Column(name = "username", length = 512, nullable = false)
     private String username;
 
