@@ -7,11 +7,11 @@
         <table class="table">
           <tbody>
           <tr *ngFor="let rf of formDTO['readonlyFields']">
-            <th *ngIf="rf.list == true"  rowspan="o.value.length"> {{rf.name}} </th>
+            <th *ngIf="rf.isList == true" rowspan="{{rf.value.length}}"> {{rf.name}} </th>
 
 
-            <th *ngIf="rf.list == false"> {{rf.name}} </th>
-            <td *ngIf="rf.list == false ; else printList"> {{rf.value}}</td>
+            <th *ngIf="rf.isList == false"> {{rf.name}} </th>
+            <td *ngIf="rf.isList == false ; else printList"> {{rf.value}}</td>
 
             <ng-template #printList>
               <table>
@@ -52,6 +52,12 @@
           <select multiple formControlName={{field.id}} *ngIf="field.type.name=='multiselectGenre'"
                   class="form-control">
             <option *ngFor="let val of genres" value={{val}}>
+              {{field.type.values[val]}}
+            </option>
+          </select>
+          <select formControlName={{field.id}} *ngIf="field.type.name=='enum'"
+                  class="form-control">
+            <option *ngFor="let val of enumValues" value={{val}}>
               {{field.type.values[val]}}
             </option>
           </select>

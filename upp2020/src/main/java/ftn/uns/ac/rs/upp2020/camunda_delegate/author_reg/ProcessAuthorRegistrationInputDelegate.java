@@ -86,6 +86,7 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
                        city,
                        country,
                        "",
+                       false,
                        false);
 
         // Save new user

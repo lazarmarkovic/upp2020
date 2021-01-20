@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UserService} from '../../services/user.service';
 import {ToastrService} from 'ngx-toastr';
+import {AuthService} from '../../services/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -17,6 +18,7 @@ export class NavigationComponent implements OnInit {
     public activeRoute: ActivatedRoute,
     private formBuilder: FormBuilder,
     private userService: UserService,
+    private authService: AuthService,
     private tService: ToastrService) {
 
     this.options = formBuilder.group({
@@ -38,6 +40,11 @@ export class NavigationComponent implements OnInit {
         },
         err => {}
       );
+  }
+
+  logout(): void {
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('authUser');
   }
 
 }

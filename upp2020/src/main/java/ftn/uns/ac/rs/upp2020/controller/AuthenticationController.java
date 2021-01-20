@@ -4,6 +4,7 @@ import ftn.uns.ac.rs.upp2020.dto.LoginDTO;
 import ftn.uns.ac.rs.upp2020.dto.TokenDTO;
 import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.dto.UserDTO;
+import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 
 import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
@@ -94,11 +95,13 @@ public class AuthenticationController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/auth-user")
-    public ResponseEntity<?> getAuthUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public ResponseEntity<?> getAuthUser() throws GeneralException {
 
-        UserDetails userDetails = (UserDetails) auth.getPrincipal();
-        User user = userService.findByUsername(userDetails.getUsername());
+        User user = authenticationService.getAuthUser();
+
+        if (user == null) {
+            throw new GeneralException("User not logged in.");
+        }
 
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
         userDTO.setGenres(user.getUserGenres()

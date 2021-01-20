@@ -18,6 +18,7 @@ export class TaskComponent implements OnInit {
 
   public regUserForm = new FormGroup({});
   public genres: any[] | undefined;
+  public enumValues: any[] | undefined;
 
   public selectedFiles = [];
 
@@ -56,6 +57,12 @@ export class TaskComponent implements OnInit {
               // @ts-ignore
               this.genres = Object.keys(field.type.values);
             }
+
+            if (field.type.name === 'enum') {
+              this.enumValues = Object.keys(field.type.values);
+            }
+
+            console.log(response.readonlyFields);
           });
         },
         err => {
@@ -79,7 +86,7 @@ export class TaskComponent implements OnInit {
     // @ts-ignore
     const {taskId} = this.formDTO;
     this.taskService
-      .submit(values, taskId)
+      .submit(values, taskId, this.formDTO.formName)
       .subscribe(
         res => {
           console.log(res);

@@ -17,8 +17,12 @@ export class TaskService {
     return this.httpClient.get('/tasks/' + taskId + '/form');
   }
 
-  submit(data: any, taskId: string): Observable<any> {
-    return this.httpClient.post('/tasks/submit/' + taskId, data);
+  submit(data: any, taskId: string, taskName: string): Observable<any> {
+    if (taskName === 'review author by committee') {
+      return this.httpClient.post('/tasks/submit-member-vote/' + taskId, data);
+    } else {
+      return this.httpClient.post('/tasks/submit/' + taskId, data);
+    }
   }
 
   uploadFiles(taskId: string | undefined, files: any[]): Observable<any> {

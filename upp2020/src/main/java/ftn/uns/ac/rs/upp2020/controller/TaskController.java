@@ -1,11 +1,14 @@
 package ftn.uns.ac.rs.upp2020.controller;
 
 import ftn.uns.ac.rs.upp2020.domain.Genre;
+import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.dto.FileHolderDTO;
 import ftn.uns.ac.rs.upp2020.dto.FormDTO;
 import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
 import ftn.uns.ac.rs.upp2020.dto.TaskDTO;
+import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
+import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
 import ftn.uns.ac.rs.upp2020.service.GenreService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,6 +38,7 @@ public class TaskController {
     private final RepositoryService repositoryService;
     private final TokenUtils tokenUtils;
 
+    private final AuthenticationService authenticationService;
     private final TaskService taskService;
     private final FormService formService;
     private final GenreService genreService;
@@ -45,6 +49,7 @@ public class TaskController {
                           RuntimeService runtimeService,
                           RepositoryService repositoryService,
                           TokenUtils tokenUtils,
+                          AuthenticationService authenticationService,
                           TaskService taskService,
                           FormService formService,
                           GenreService genreService) {
@@ -52,6 +57,7 @@ public class TaskController {
         this.runtimeService = runtimeService;
         this.repositoryService = repositoryService;
         this.tokenUtils = tokenUtils;
+        this.authenticationService = authenticationService;
         this.taskService = taskService;
         this.formService = formService;
         this.genreService = genreService;
@@ -81,12 +87,14 @@ public class TaskController {
 
     @GetMapping(path = "", produces = "application/json")
     public @ResponseBody ResponseEntity<List<TaskDTO>> get(HttpServletRequest http){
-        String authToken = http.getHeader("X-Auth-Token");
-
         String username = "guest";
-        if (authToken != null){
-            username = this.tokenUtils.getUsernameFromToken(authToken);
+        User user = this.authenticationService.getAuthUser();
+
+        if (user != null) {
+            username = user.getUsername();
         }
+
+        System.out.println("Current user: " + username);
 
         List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
         List<TaskDTO> taskDTOs = tasks.stream()
@@ -127,12 +135,20 @@ public class TaskController {
         }
 
         for (FormField fp : fieldReadonly) {
-            System.out.println("Polje " + fp.getLabel() + " je readonly");
+            System.out.println("Field " + fp.getLabel() + " is readonly");
             System.out.println(fp.getTypeName());
 
             if (fp.getTypeName().equals("multiselectGenre")) {
-                System.out.println("Usao. Field type is: " + fp.getTypeName());
+                System.out.println("Field type is: " + fp.getTypeName());
                 List<String> values = genreService.getAll().stream().map((Genre::getName)).collect(Collectors.toList());
+                readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
+
+            } else  if (fp.getTypeName().equals("multiselectPDF")) {
+                    System.out.println("Field type is: " + fp.getTypeName());
+                String processInstanceId = task.getProcessInstanceId();
+                List<FileHolderDTO> works = ( List<FileHolderDTO>)runtimeService.getVariable(processInstanceId, "files");
+                List<String> values = works.stream().map((w) -> "http://localhost:8080/works/" + w.getFileName()).collect(Collectors.toList());
+
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
             } else {
                 System.out.println("Nije usao. Field type is: " + fp.getTypeName());

@@ -20,4 +20,5 @@ public class UserDTO {
     private String city;
     private String country;
     private Boolean verified;
+    private Boolean approved;
 }
