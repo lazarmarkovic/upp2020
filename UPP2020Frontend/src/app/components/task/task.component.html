@@ -7,7 +7,7 @@
         <table class="table">
           <tbody>
           <tr *ngFor="let rf of formDTO['readonlyFields']">
-            <th *ngIf="rf.isList == true" rowspan="{{rf.value.length}}"> {{rf.name}} </th>
+            <th *ngIf="rf.isList == true" [attr.colspan]="rf.value.length"> {{rf.name}} </th>
 
 
             <th *ngIf="rf.isList == false"> {{rf.name}} </th>
@@ -30,7 +30,8 @@
 
       <form class="form-group" [formGroup]="regUserForm" (ngSubmit)="onSubmit()">
         <div *ngFor="let field of formDTO['formFields']">
-          <label for={{field.id}} *ngIf="field.type.name !='string'">{{field.label}}</label>
+          <label for={{field.id}} *ngIf="field.type.name !='string' ||
+                 field.id == 'pdfFiles'">{{field.label}}</label>
 
           <input type="text" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
                  class="form-control"

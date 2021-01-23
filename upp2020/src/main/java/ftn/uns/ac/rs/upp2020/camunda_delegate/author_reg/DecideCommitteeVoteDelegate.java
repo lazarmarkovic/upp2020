@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DecideCommitteeVote implements JavaDelegate {
+public class DecideCommitteeVoteDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
         List<String> votes = (List<String>) delegateExecution.getVariable("committeeVotes");

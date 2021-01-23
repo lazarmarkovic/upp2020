@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SaveMoreWork implements JavaDelegate {
+public class SaveMoreWorkDelegate implements JavaDelegate {
 
     @Autowired
     PreviousWorkRepository previousWorkRepository;

@@ -1,6 +1,5 @@
 package ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg;
 
-
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+
 @Service
-public class NotifyAuthorAboutFailedPayment implements JavaDelegate {
+public class NotifyAuthorToSendMoreWorksDelegate implements JavaDelegate {
+
     @Autowired
     private JavaMailSender javaMailSender;
 
@@ -20,10 +21,10 @@ public class NotifyAuthorAboutFailedPayment implements JavaDelegate {
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
-        mailMessage.setSubject("UPP Membership payment");
+        mailMessage.setSubject("UPP Membership information");
         mailMessage.setText(
                 firstName +
-                        ",\n You failed to pay membership fees in due time. Your account remains unapproved.");
+                        ",\nCommittee has requested more of your works. You have 2 days to submit more works.");
 
         javaMailSender.send(mailMessage);
     }

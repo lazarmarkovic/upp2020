@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotifyAuthorAboutMembershipRequestCancellation implements JavaDelegate {
+public class NotifyAuthorAboutSuccessfulMembershipApprovalDelegate implements JavaDelegate {
 
     @Autowired
     private JavaMailSender javaMailSender;
@@ -21,10 +21,10 @@ public class NotifyAuthorAboutMembershipRequestCancellation implements JavaDeleg
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(email);
-        mailMessage.setSubject("UPP Membership information");
+        mailMessage.setSubject("UPP Membership APPROVED");
         mailMessage.setText(
                 firstName +
-                        ",\n Unfortunately we must cancel your membership request.");
+                        ",\nWe are delighted to inform you that your membership has been approved by the committee.");
 
         javaMailSender.send(mailMessage);
     }

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class SendWorkToCommitteeAndStartVote implements JavaDelegate {
+public class SendWorkToCommitteeAndStartVoteDelegate implements JavaDelegate {
 
     @Autowired
     UserRepository userRepository;
