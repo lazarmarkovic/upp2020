@@ -98,7 +98,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/tasks/1dc43f31-5923-11eb-b52f-4cbb58327120/form",
+							"raw": "http://localhost:8080/tasks/4d5c296b-59da-11eb-8c67-4cbb58327120/form",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -106,7 +106,7 @@
 							"port": "8080",
 							"path": [
 								"tasks",
-								"1dc43f31-5923-11eb-b52f-4cbb58327120",
+								"4d5c296b-59da-11eb-8c67-4cbb58327120",
 								"form"
 							]
 						}
@@ -116,7 +116,7 @@
 				{
 					"name": "(Task) submit task form",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "http://localhost:8080/tasks/submit/c00335db-4971-11eb-8771-4cbb58327120",
@@ -129,6 +129,40 @@
 								"tasks",
 								"submit",
 								"c00335db-4971-11eb-8771-4cbb58327120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Task) upload files",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/Lazar/Desktop/Literarno udruženje.pdf",
+										"/C:/Users/Lazar/Desktop/Master's apron.txt"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/tasks/4d5c296b-59da-11eb-8c67-4cbb58327120/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"4d5c296b-59da-11eb-8c67-4cbb58327120",
+								"upload"
 							]
 						}
 					},
@@ -243,8 +277,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "(RAP) 5. submit previous works",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tasks/submit/4d5c296b-59da-11eb-8c67-4cbb58327120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"submit",
+								"4d5c296b-59da-11eb-8c67-4cbb58327120"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "Bank server simulator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/ok/jaitito",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"ok",
+						"jaitito"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
