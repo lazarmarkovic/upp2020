@@ -74,8 +74,6 @@ public class TaskController {
             @RequestBody List<InputDataDTO> data,
             @PathVariable String taskId ){
 
-        System.out.println(">> SUBMIT TASK: ");
-        System.out.println(data);
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
@@ -98,8 +96,6 @@ public class TaskController {
             username = user.getUsername();
         }
 
-        System.out.println("Current user: " + username);
-
         List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
         List<TaskDTO> taskDTOs = tasks.stream()
                 .map(t -> {
@@ -121,6 +117,7 @@ public class TaskController {
         List<InputDataDTO> readonlyFields = new ArrayList<>();
         List<FormField> fields = tfd.getFormFields();
 
+        /* ADD READONLY FIELDS */
         List<FormField> fieldReadonly = new ArrayList<>();
         for(FormField fp : fields){
             for (FormFieldValidationConstraint fc : fp.getValidationConstraints()){
@@ -129,33 +126,28 @@ public class TaskController {
                 }
             }
         }
-        List<FormField> properties = new ArrayList<>();
 
-        //prodjemo kroz sva polja i proverimo da li postoje u readonly, ako ne postoje dodamo ih u properties
+        /* ADD INPUT FIELDS */
+        List<FormField> properties = new ArrayList<>();
         for(FormField fp : fields){
             if (!fieldReadonly.contains(fp)){
-                properties.add(fp); //ovo su sad sva polja koja nisu readonly
+                properties.add(fp);
             }
         }
 
+        /* FILL READONLY FIELDS */
         for (FormField fp : fieldReadonly) {
-            System.out.println("Field " + fp.getLabel() + " is readonly");
-            System.out.println(fp.getTypeName());
-
             if (fp.getTypeName().equals("multiselectGenre")) {
-                System.out.println("Field type is: " + fp.getTypeName());
                 List<String> values = genreService.getAll().stream().map((Genre::getName)).collect(Collectors.toList());
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
 
             } else  if (fp.getTypeName().equals("multiselectPDF")) {
-                System.out.println("Field type is: " + fp.getTypeName());
                 String processInstanceId = task.getProcessInstanceId();
                 String username = (String) runtimeService.getVariable(processInstanceId, "username");
                 User user = userService.findByUsername(username);
                 List<String> values = user.getPreviousWorks().stream().map((w) -> "http://localhost:8080/works/" + w.getName()).collect(Collectors.toList());
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
             } else {
-                System.out.println("Nije usao. Field type is: " + fp.getTypeName());
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), fp.getValue().getValue(), false));
             }
         }
@@ -171,10 +163,8 @@ public class TaskController {
 
         List<MultipartFile> fileList = new ArrayList<>(Arrays.asList(files));
 
-        System.out.println("---Uploaded files names: ");
         List<FileHolderDTO> bytesList = fileList.stream().map((f) -> {
             try {
-                System.out.println(f.getOriginalFilename());
                 return new FileHolderDTO(f.getOriginalFilename(), f.getBytes());
             } catch (IOException e) {
                 e.printStackTrace();

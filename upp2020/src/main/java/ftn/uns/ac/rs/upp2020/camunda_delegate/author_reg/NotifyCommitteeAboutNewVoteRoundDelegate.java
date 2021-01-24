@@ -20,6 +20,7 @@ public class NotifyCommitteeAboutNewVoteRoundDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("--- Task: notify committee about new vote round");
 
         String firstName = (String) delegateExecution.getVariable("firstName");
         String lastName = (String) delegateExecution.getVariable("lastName");

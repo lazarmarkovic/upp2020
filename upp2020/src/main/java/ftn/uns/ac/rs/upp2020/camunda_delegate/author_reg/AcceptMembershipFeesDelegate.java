@@ -20,13 +20,12 @@ class BankResponseDTO implements Serializable {
 public class AcceptMembershipFeesDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        System.out.println("ACCEPT PAYMENT");
+        System.out.println("--- Task: accept membership fees");
 
         String username = (String) delegateExecution.getVariable("username");
 
         RestTemplate restTemplate = new RestTemplate();
         while (true) {
-            System.out.println("TIK");
             Thread.sleep(10000);
 
             BankResponseDTO bankResponseDTO = restTemplate

@@ -36,7 +36,6 @@ public class AuthenticationTokenFilter extends UsernamePasswordAuthenticationFil
 
             String authToken = authorizationHeader.substring(7);
             String username = tokenUtils.getUsernameFromToken(authToken);
-            System.out.println("User from token: " + username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);

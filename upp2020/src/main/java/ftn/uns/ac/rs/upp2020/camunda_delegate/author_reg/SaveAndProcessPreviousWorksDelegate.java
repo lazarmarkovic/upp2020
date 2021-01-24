@@ -26,7 +26,7 @@ public class SaveAndProcessPreviousWorksDelegate  implements JavaDelegate {
     @Override
     @Transactional
     public void execute(DelegateExecution execution) throws Exception {
-        System.out.println("-----SAVE AND PROCESS PREVIOUS WORKS");
+        System.out.println("--- Task: save and process previous works");
 
         String username = (String) execution.getVariable("username");
         User user = userService.findByUsername(username);

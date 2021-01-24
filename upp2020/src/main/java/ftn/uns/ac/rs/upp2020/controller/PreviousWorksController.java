@@ -33,8 +33,6 @@ public class PreviousWorksController {
         }
 
         byte[] bytes = opt.get().getFile();
-        System.out.println(opt.get().getName());
-
         String fileName = opt.get().getName();
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)

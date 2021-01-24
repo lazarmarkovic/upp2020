@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class InitVotingRoundDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("--- Task: init voting round");
+
         delegateExecution.setVariable("committeeVotes", new ArrayList<String>());
         delegateExecution.setVariable("committeeComments", new ArrayList<String>());
     }

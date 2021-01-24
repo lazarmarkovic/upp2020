@@ -33,10 +33,21 @@ export class NavigationComponent implements OnInit {
 
   startAuthorRegistration(): void {
     this.userService
-      .runRegistration()
+      .runAuthorRegistration()
       .subscribe(
         response => {
           this.tService.success('Author registration process started', 'Success');
+        },
+        err => {}
+      );
+  }
+
+  startReaderRegistration(): void {
+    this.userService
+      .runReaderRegistration()
+      .subscribe(
+        response => {
+          this.tService.success('Reader registration process started', 'Success');
         },
         err => {}
       );

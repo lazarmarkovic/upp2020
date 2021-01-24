@@ -28,7 +28,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public User getAuthUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(auth.getPrincipal());
 
         try {
             UserDetails userDetails = (UserDetails) auth.getPrincipal();

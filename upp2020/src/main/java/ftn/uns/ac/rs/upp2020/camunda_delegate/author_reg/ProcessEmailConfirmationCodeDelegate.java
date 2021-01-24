@@ -21,7 +21,7 @@ public class ProcessEmailConfirmationCodeDelegate implements JavaDelegate {
     @Override
     @Transactional
     public void execute(DelegateExecution execution) throws Exception {
-        System.out.println("PROCESS CONFIRMATION CODE");
+        System.out.println("--- Task: process email confirmation code");
 
         String confCode = execution.getVariable("confirmationEmailCode").toString();
         Optional<User> opt = userRepository.findByVerificationCode(confCode);

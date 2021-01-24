@@ -38,12 +38,18 @@ public class UserController {
 
 
     @GetMapping(path = "/start-author-registration", produces = "application/json")
-    public @ResponseBody Boolean runRegistration(){
+    public @ResponseBody Boolean runAuthorRegistration(){
         identityService.setAuthenticatedUserId("guest");
         ProcessInstance pi = runtimeService.startProcessInstanceByKey("author_registration");
         runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
+        return true;
+    }
 
-        System.out.println("START AUTHOR REGISTRATION PROCESS");
+    @GetMapping(path = "/start-reader-registration", produces = "application/json")
+    public @ResponseBody Boolean runReaderRegistration(){
+        identityService.setAuthenticatedUserId("guest");
+        ProcessInstance pi = runtimeService.startProcessInstanceByKey("reader_registration");
+        runtimeService.setVariable(pi.getProcessInstanceId(), "starter", "guest");
         return true;
     }
 

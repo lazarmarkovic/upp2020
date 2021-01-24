@@ -7,8 +7,7 @@
       <a mat-list-item (click)="router.navigate(['login'], {relativeTo : activeRoute})">Login</a>
       <a mat-list-item (click)="router.navigate(['tasks'], {relativeTo : activeRoute})">Task list</a>
       <a mat-list-item (click)="startAuthorRegistration()">Register author</a>
-      <a mat-list-item>Register reader</a>
-      <a mat-list-item>Register beta reader</a>
+      <a mat-list-item (click)="startReaderRegistration()">Register reader</a>
       <a mat-list-item>Publish work</a>
       <a mat-list-item (click)="logout()">Logout</a>
     </mat-nav-list>

@@ -11,9 +11,10 @@ import java.util.List;
 public class DecideCommitteeVoteDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("--- Task: decide committee vote");
+
         List<String> votes = (List<String>) delegateExecution.getVariable("committeeVotes");
         int committeeSize = (int) delegateExecution.getVariable("committeeSize");
-        System.out.println(votes);
 
         int yes = (int) votes.stream().filter(v -> v.equals("YES")).count();
         int no =  (int) votes.stream().filter(v -> v.equals("NO")).count();
@@ -33,8 +34,5 @@ public class DecideCommitteeVoteDelegate implements JavaDelegate {
         else {
             delegateExecution.setVariable("committeeDecision", "VOTE_AGAIN");
         }
-
-        System.out.println((String)delegateExecution.getVariable("committeeDecision"));
-
     }
 }

@@ -65,8 +65,6 @@ public class AuthenticationController {
     @RequestMapping(value = "/login", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> loginUser(@RequestBody LoginDTO loginDto){
-        System.out.println(">> login : username " + loginDto.getUsername() + " pass " + loginDto.getPassword());
-
         try{
             if(this.authenticationService.login(loginDto)){
                 HttpHeaders httpHeaders = new HttpHeaders();

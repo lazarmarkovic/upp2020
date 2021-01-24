@@ -24,13 +24,14 @@ public class SaveMoreWorkDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
-        System.out.println("-----SAVE MORE WORK");
+        System.out.println("--- Task: save more work");
+
         String username = (String) delegateExecution.getVariable("username");
         User user = userService.findByUsername(username);
         List<FileHolderDTO> pdfFiles = (List<FileHolderDTO>) delegateExecution.getVariable("files");
 
         pdfFiles.forEach((f -> {
-            System.out.println("Save work: " + f.getFileName());
+            System.out.println("**** Save work: " + f.getFileName());
             PreviousWork previousWork = new PreviousWork();
             previousWork.setName(f.getFileName());
             previousWork.setFile(f.getFile());

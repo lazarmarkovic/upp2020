@@ -9,8 +9,12 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  runRegistration(): Observable<any> {
+  runAuthorRegistration(): Observable<any> {
     return this.httpClient.get('/users/start-author-registration');
+  }
+
+  runReaderRegistration(): Observable<any> {
+    return this.httpClient.get('/users/start-reader-registration');
   }
 
 }

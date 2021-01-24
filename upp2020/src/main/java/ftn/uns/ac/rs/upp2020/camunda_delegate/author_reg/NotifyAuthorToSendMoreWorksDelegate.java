@@ -16,6 +16,8 @@ public class NotifyAuthorToSendMoreWorksDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("--- Task: notify author to send more works");
+
         String firstName = (String) delegateExecution.getVariable("firstName");
         String email = (String) delegateExecution.getVariable("email");
 

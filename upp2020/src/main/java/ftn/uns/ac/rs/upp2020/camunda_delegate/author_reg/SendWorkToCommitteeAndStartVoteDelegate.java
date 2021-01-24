@@ -21,6 +21,8 @@ public class SendWorkToCommitteeAndStartVoteDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("--- Task: send work to committee and start vote");
+
         List<User> c_members = userRepository.findAllByRole(Role.COMMITTEE_MEMBER);
         List<User> c_president = userRepository.findAllByRole(Role.COMMITTEE_PRESIDENT);
 
