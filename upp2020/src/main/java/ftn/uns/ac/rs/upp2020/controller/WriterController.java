@@ -48,9 +48,6 @@ public class WriterController {
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 
-        Task task = taskService.createTaskQuery().taskId(taskId).singleResult();
-        String processInstanceId = task.getProcessInstanceId();
-
         try {
             formService.submitTaskForm(taskId, map);
         }catch (Exception e){

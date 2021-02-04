@@ -2,6 +2,9 @@ package ftn.uns.ac.rs.upp2020.controller;
 
 import ftn.uns.ac.rs.upp2020.dto.*;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
+import ftn.uns.ac.rs.upp2020.service.FileManipulationService;
+import ftn.uns.ac.rs.upp2020.service.FileManipulationServiceImpl;
+
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.impl.identity.Authentication;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
@@ -9,9 +12,11 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Comparator;
@@ -36,6 +41,9 @@ public class UserController {
 
     @Autowired
     FormService formService;
+
+    @Autowired
+    FileManipulationServiceImpl fileServiceManipulation;
 
     @Autowired
     private TokenUtils tokenUtils;
@@ -237,13 +245,12 @@ public class UserController {
     }
 
 
-    @PostMapping(path = "/send-full-transcript/{taskId}", produces = "application/json")
-    public @ResponseBody ResponseEntity<?> uploadTranscript(@RequestBody List<InputDataDTO> data, @PathVariable String taskId) {
-        HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
-                .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
+    @PostMapping(path = "/send-full-transcript/{taskId}", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public @ResponseBody ResponseEntity<?> uploadTranscript(@RequestParam("file") MultipartFile file, @PathVariable String taskId) {
+        HashMap<String, Object> map = new HashMap<String,Object>();
 
-
-        try {
+        this.fileServiceManipulation.saveTranscript(file);
+        try {   
             formService.submitTaskForm(taskId, map);
         }catch (Exception e){
             return new ResponseEntity<> (HttpStatus.BAD_REQUEST);

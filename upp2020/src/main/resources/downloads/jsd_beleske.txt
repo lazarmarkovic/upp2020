@@ -1,0 +1,19 @@
+console.py je fajl od koga sve krece
+generise se model object na osnovu testigrica.pg fajla koji se prosledjuje kao argument funkciji, i pomocu pygame_sl sintakse.
+Ukoliko ima nekih problema pri generisanju modela, tu ce se ispisati neki textX exception i program ce zavrsiti.
+Ukoliko je sve u redu, pozvace se generate metoda (iz generator/__init__.py), kojoj se prosledjuje model.
+Generate metoda ucitava pygame_template pomocu jinja2 biblioteke, definise output fajl, i zatim pomocu
+template fajla i prosledjenog modela, generise python kod koji se upisuje u taj output fajl.
+To je konacan rezultat, ta igrica koju mozes pokrenuti.
+
+Ostatak plana za jezik:
+Stvari koje ce biti dodate u sinaksu su mogucnost postavljanja pozadine (boja/slika),
+mogucnost dodavanja neprijatelja (sto bi uzrokovalo da moraju da se definisu helti player-a),
+tekst na pocetku igrice, tj initial screen, i screen kada se predju svi leveli ili se skupe svi poeni
+
+
+Pitanja:
+Da li je potrebno da TextX bude na poslednjoj verziji, posto je trenutna verzija koju koristimo 2.1.0?
+Ne izgleda kao da ima razlika koje bi uticale na ovaj projekat, ali svakako da pitamo.
+
+Da li ima neke predloge za nadogradjivanje?
