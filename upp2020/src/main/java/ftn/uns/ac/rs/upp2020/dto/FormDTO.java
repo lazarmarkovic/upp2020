@@ -1,6 +1,5 @@
 package ftn.uns.ac.rs.upp2020.dto;
 
-import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

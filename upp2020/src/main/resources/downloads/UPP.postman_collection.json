@@ -1,0 +1,379 @@
+{
+	"info": {
+		"_postman_id": "abae3bdd-4f6f-463b-b7ed-7444f41ae09a",
+		"name": "UPP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "(Auth) login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"pera\",\r\n    \"password\": \"12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "(User) register author",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/start-author-registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"start-author-registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(User) submit registration form",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"username\",\r\n        \"value\": \"mika\"\r\n    },\r\n    {\r\n        \"name\": \"password\",\r\n        \"value\": \"123456\"\r\n    },\r\n    {\r\n        \"name\": \"email\",\r\n        \"value\": \"lazar.kmarkovic@gmail.com\"\r\n    },\r\n    {\r\n        \"name\": \"firstName\",\r\n        \"value\": \"Mika\"\r\n    },\r\n    {\r\n        \"name\": \"lastName\",\r\n        \"value\": \"Mikic\"\r\n    },\r\n    {\r\n        \"name\": \"city\",\r\n        \"value\": \"Novi Sad\"\r\n    },\r\n    {\r\n        \"name\": \"country\",\r\n        \"value\": \"Srbija\"\r\n    },\r\n    {\r\n        \"name\": \"select_genres\",\r\n        \"value\": [\r\n            \"FILOZOFIJA\",\r\n            \"UMETNOST\"\r\n        ],\r\n        \"isList\": true\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/submit/352f5948-4932-11eb-aa0f-a85e455d601b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"submit",
+								"352f5948-4932-11eb-aa0f-a85e455d601b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(User) submit verification code",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"code\",\r\n        \"value\": \"ahBeH\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/submit/f6105f74-3f7a-11eb-a707-4cbb58327120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"submit",
+								"f6105f74-3f7a-11eb-a707-4cbb58327120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(User) get submit form html",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "df7e26f6-3f8c-11eb-a707-4cbb58327120",
+							"host": [
+								"df7e26f6-3f8c-11eb-a707-4cbb58327120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(User) publish book",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/publish-book",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"publish-book"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(User) sumbit book publishment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"title\",\r\n        \"value\": \"testKnjiga4\"\r\n    },\r\n    {\r\n        \"name\": \"genre\",\r\n        \"value\": \"epicFantasy5\"\r\n    },\r\n    {\r\n        \"name\": \"synopsis\",\r\n        \"value\": \"Very nice movie6\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/publish/bb1f3597-5a9a-11eb-8100-a85e455d601b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"publish",
+								"bb1f3597-5a9a-11eb-8100-a85e455d601b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(User)  submit review",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"approve\",\r\n        \"value\": true\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/review/c9773bc3-5a9a-11eb-8100-a85e455d601b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"review",
+								"c9773bc3-5a9a-11eb-8100-a85e455d601b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Editor) Add explanation",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"book_id\",\r\n        \"value\": 1\r\n    },\r\n     {\r\n        \"name\": \"explanation_field\",\r\n        \"value\": \"Last tryyyyyy\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/explanation/a5f7e57e-5a8c-11eb-a40c-a85e455d601b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"explanation",
+								"a5f7e57e-5a8c-11eb-a40c-a85e455d601b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Writer) Send full transcript",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"transcript\",\r\n        \"value\": \"THIS IS TEST TEXT aNEW22233\"\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/send-full-transcript/9bc62041-5a92-11eb-b587-a85e455d601b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"send-full-transcript",
+								"9bc62041-5a92-11eb-b587-a85e455d601b"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Editor) Read transcript",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    {\r\n        \"name\": \"approvedTranscript\",\r\n        \"value\": false\r\n    }\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8080/user/read-transcript/a36c495c-5a92-11eb-b587-a85e455d601b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"read-transcript",
+								"a36c495c-5a92-11eb-b587-a85e455d601b"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "task",
+			"item": [
+				{
+					"name": "(Task) get tasks",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Task) get editor tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/editor-tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"editor-tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Task) get writer tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/user/writer-tasks",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"user",
+								"writer-tasks"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

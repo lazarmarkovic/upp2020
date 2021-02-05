@@ -26,4 +26,3 @@ insert into camunda.aa__users(id, username, password, role, email,
                               first_name, last_name, city, country, activation_code, activated, approved)
 values (5, 'comprez', '$2a$10$kx6ymttdiBQ/3NAz1ssxoeOF8Vwm3LSKFnEkSADPc5x8kgaj/vKnC', 'COMMITTEE_PRESIDENT',
         'lazar.kmarkovic+4@gmail.com', 'comprez', 'comprez', 'Novi Sad', 'Srbija', '1234567', true, true);
-
