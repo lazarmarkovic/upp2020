@@ -16,4 +16,6 @@ public interface BookRepository  extends JpaRepository<Book, Long> {
 
     @Query(value = "select b from Book b where b.transcript = ?1 AND b.id != ?2")
     Optional<List<Book>> findAllBooksWithSameTranscript(String transcript, Long id);
+
+    Optional<Book> findByTitle(String title);
 }

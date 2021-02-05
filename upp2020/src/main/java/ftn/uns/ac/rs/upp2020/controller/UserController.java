@@ -118,7 +118,49 @@ public class UserController {
     public @ResponseBody ResponseEntity<List<TaskDTO>> getEditorTasks(HttpServletRequest http) {
         String authToken = http.getHeader("X-Auth-Token");
 
-        String username = "editor";
+        String username = "editor2";
+        if (authToken != null) {
+            username = this.tokenUtils.getUsernameFromToken(authToken);
+        }
+
+        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(t -> {
+                    String taskName = t.getName().split(" ")[0];
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
+                })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/headEditor-tasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getHeadEditorTasks(HttpServletRequest http) {
+        String authToken = http.getHeader("X-Auth-Token");
+
+        String username = "headEditorMisk";
+        if (authToken != null) {
+            username = this.tokenUtils.getUsernameFromToken(authToken);
+        }
+
+        List<Task> tasks= taskService.createTaskQuery().taskAssignee(username).list();
+        List<TaskDTO> taskDTOs = tasks.stream()
+                .map(t -> {
+                    String taskName = t.getName().split(" ")[0];
+                    return new TaskDTO(t.getId(), t.getName(), t.getAssignee(), taskName, t.getCreateTime());
+                })
+                .sorted(Comparator.comparing(TaskDTO::getCreationTime))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(taskDTOs, HttpStatus.OK);
+    }
+
+    @GetMapping(path = "/committee-tasks", produces = "application/json")
+    public @ResponseBody ResponseEntity<List<TaskDTO>> getCommitteeTasks(HttpServletRequest http) {
+        String authToken = http.getHeader("X-Auth-Token");
+
+        String username = "committee1";
         if (authToken != null) {
             username = this.tokenUtils.getUsernameFromToken(authToken);
         }

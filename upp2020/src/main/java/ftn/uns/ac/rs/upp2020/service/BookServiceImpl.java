@@ -22,4 +22,9 @@ public class BookServiceImpl implements BookService{
         }
         return book.get();
     }
+
+    public void markPlagiarism(Book book){
+        book.setStatus(3);
+        bookRepository.save(book);
+    }
 }

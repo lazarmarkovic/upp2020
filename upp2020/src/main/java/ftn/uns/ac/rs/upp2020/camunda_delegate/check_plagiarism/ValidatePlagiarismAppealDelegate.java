@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 
 @Service
-public class ValidatePlagiarismAppeal implements JavaDelegate {
+public class ValidatePlagiarismAppealDelegate implements JavaDelegate {
 
     @Autowired
     private BookService bookService;
@@ -28,13 +28,6 @@ public class ValidatePlagiarismAppeal implements JavaDelegate {
 
         if (!author.equals(plagiarizedBook.getUser()))
             throw new Exception(String.format("%s did not write %s",author.getUsername(), plagiarizedBook.getTitle() ));
-
-
-
-        System.out.println("In validation delegate");
-        System.out.println(myBook.getTitle());
-        System.out.println(plagiarizedBook.getTitle());
-        System.out.println(author.getUsername());
 
     }
 }

@@ -1,7 +1,5 @@
 package ftn.uns.ac.rs.upp2020.camunda_delegate.check_plagiarism;
 
-
-
 import org.camunda.bpm.engine.IdentityService;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
@@ -12,35 +10,26 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NewAppealNotification implements JavaDelegate {
+public class ApprovedPlagiarismAppealAuthorNotificationDelegate implements JavaDelegate {
 
     @Autowired
-    IdentityService identityService;
+    private IdentityService identityService;
 
     @Autowired
     private JavaMailSender javaMailSender;
 
-
     @Override
     public void execute(DelegateExecution execution) throws Exception {
 
-
-        User leadEditor = identityService.createUserQuery().memberOfGroup("leadEditor").list().get(0);
-
-        execution.setVariable("leadEditorUser", leadEditor);
-        execution.setVariable("leadEditor", leadEditor.getId());
-
-        System.out.println("Lead Editor obavesten");
-        System.out.println(leadEditor.getId());
+        User author = identityService.createUserQuery().userId(execution.getVariable("author").toString()).singleResult();
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(leadEditor.getEmail());
-        mailMessage.setSubject("New Plagiarism Appeal");
-        mailMessage.setText(String.format("%s, new plagiarism appeal has been made. " +
-                "Please assign at least 2 editors to review it.", leadEditor.getId()));
-
+        mailMessage.setTo(author.getEmail());
+        mailMessage.setSubject("Plagiarism Appeal Accepted");
+        mailMessage.setText(String.format("%s, your book has been marked as plagiarism.", author.getId()));
 
         javaMailSender.send(mailMessage);
-    }
 
+        System.out.println("Author obavesten");
+    }
 }
