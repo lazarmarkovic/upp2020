@@ -1,26 +1,30 @@
 package ftn.uns.ac.rs.upp2020.domain;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
-
 @Entity
-@Table(name = "aa__genres")
+@Table(name = "aa__previous_works")
 @Getter
 @Setter
-public class Genre implements Serializable {
+public class PreviousWork implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "code", length = 512, nullable = false)
-    private String code;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(name = "name", length = 512, nullable = false)
     private String name;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "file", columnDefinition = "MEDIUMBLOB", nullable = false)
+    private byte[] file;
 }

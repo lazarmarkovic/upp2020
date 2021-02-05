@@ -7,16 +7,19 @@
         <table class="table">
           <tbody>
           <tr *ngFor="let rf of formDTO['readonlyFields']">
-            <th *ngIf="rf.list == true"  rowspan="o.value.length"> {{rf.name}} </th>
+            <th *ngIf="rf.isList == true" [attr.colspan]="rf.value.length"> {{rf.name}} </th>
 
 
-            <th *ngIf="rf.list == false"> {{rf.name}} </th>
-            <td *ngIf="rf.list == false ; else printList"> {{rf.value}}</td>
+            <th *ngIf="rf.isList == false"> {{rf.name}} </th>
+            <td *ngIf="rf.isList == false ; else printList"> {{rf.value}}</td>
 
             <ng-template #printList>
               <table>
                 <tr *ngFor="let i of rf.value">
-                  <td> {{i}}</td>
+                  <td *ngIf="i.toString().includes('http') == false"> {{i}}</td>
+                  <td *ngIf="i.toString().includes('http') == true">
+                    <a href="{{i}}">{{i}}</a>
+                  </td>
                 </tr>
               </table>
             </ng-template>
@@ -27,12 +30,17 @@
 
       <form class="form-group" [formGroup]="regUserForm" (ngSubmit)="onSubmit()">
         <div *ngFor="let field of formDTO['formFields']">
-          <label for={{field.id}} *ngIf="field.type.name !='string'">{{field.label}}</label>
+          <label for={{field.id}} *ngIf="field.type.name !='string' ||
+                 field.id == 'pdfFiles'">{{field.label}}</label>
 
           <input type="text" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
                  class="form-control"
-                 *ngIf="field.type.name=='string' && field.id != 'password' && field.id != 'pdf'">
+                 *ngIf="field.type.name=='string' && field.id != 'password' && field.id != 'pdfFiles'">
+
           <!--upload file; treba jos neke stvari dodati -->
+          <input type="file" multiple formControlName={{field.id}} placeholder="{{field.label}}" ngModel
+                 class="form-control" (change)="uploadFiles($event)"
+                 *ngIf="field.type.name=='string' && field.id != 'password' && field.id == 'pdfFiles'">
 
           <input type="password" formControlName={{field.id}} placeholder="{{field.label}}" ngModel
                  class="form-control" *ngIf="field.id=='password'">
@@ -45,6 +53,12 @@
           <select multiple formControlName={{field.id}} *ngIf="field.type.name=='multiselectGenre'"
                   class="form-control">
             <option *ngFor="let val of genres" value={{val}}>
+              {{field.type.values[val]}}
+            </option>
+          </select>
+          <select formControlName={{field.id}} *ngIf="field.type.name=='enum'"
+                  class="form-control">
+            <option *ngFor="let val of enumValues" value={{val}}>
               {{field.type.values[val]}}
             </option>
           </select>

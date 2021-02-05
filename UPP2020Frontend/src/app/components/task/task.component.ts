@@ -3,6 +3,8 @@ import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TaskService} from '../../services/task.service';
 import {UserService} from '../../services/user.service';
+import {ToastrService} from 'ngx-toastr';
+import {HttpEventType, HttpResponse} from '@angular/common/http';
 
 
 @Component({
@@ -16,12 +18,15 @@ export class TaskComponent implements OnInit {
 
   public regUserForm = new FormGroup({});
   public genres: any[] | undefined;
+  public enumValues: any[] | undefined;
+
+  public selectedFiles = [];
 
   constructor(private router: Router,
               private route: ActivatedRoute,
-              private userService: UserService,
               private formBuilder: FormBuilder,
-              private taskService: TaskService) {}
+              private taskService: TaskService,
+              private tService: ToastrService) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(
@@ -52,6 +57,12 @@ export class TaskComponent implements OnInit {
               // @ts-ignore
               this.genres = Object.keys(field.type.values);
             }
+
+            if (field.type.name === 'enum') {
+              this.enumValues = Object.keys(field.type.values);
+            }
+
+            console.log(response.readonlyFields);
           });
         },
         err => {
@@ -68,23 +79,35 @@ export class TaskComponent implements OnInit {
     const values: { name: string | number; value: any; }[] = [];
     // tslint:disable-next-line:forin
     for (const p in this.regUserForm.value) {
+      console.log(this.regUserForm.value);
       values.push({ name: p, value: this.regUserForm.value[p] });
     }
 
     // @ts-ignore
     const {taskId} = this.formDTO;
-    this.userService
-      .submit(values, taskId)
+    this.taskService
+      .submit(values, taskId, this.formDTO.formName)
       .subscribe(
-      res => {
-        console.log(res);
-        this.router.navigate(['/tasks']);
-      },
-      err => {
-        alert('Error while submitting form:');
-        console.log(err);
-      }
-    );
+        res => {
+          console.log(res);
+          this.tService.success('Form "' + this.formDTO.formName + '" is submitted.');
+          this.router.navigate(['/tasks']);
+        },
+        err => {
+          alert('Error while submitting form:');
+          console.log(err);
+        }
+      );
   }
 
+  uploadFiles(event: any): void {
+    this.taskService.uploadFiles(this.formDTO.taskId, event.target.files).subscribe(
+      response => {
+          console.log('UPLAODED');
+          this.tService.success('All files are uploaded', 'Success');
+      },
+      err => {
+        console.log(err);
+      });
+  }
 }

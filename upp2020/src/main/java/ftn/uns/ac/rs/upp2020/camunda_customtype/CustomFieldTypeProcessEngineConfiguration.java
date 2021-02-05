@@ -23,7 +23,9 @@ public class CustomFieldTypeProcessEngineConfiguration implements ProcessEngineP
         List<AbstractFormFieldType> formTypes = processEngineConfiguration.getCustomFormTypes();
         formTypes.add(new Multiselect());
         formTypes.add(new MultiselectGenre());
+
         formTypes.add(new FileUpload());
+        formTypes.add(new MultiselectPDF());
     }
 
     @Override

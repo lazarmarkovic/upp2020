@@ -29,7 +29,8 @@ public class SendConfirmationEmailDelegate implements JavaDelegate {
     @Override
     @Transactional
     public void execute(DelegateExecution execution) throws Exception {
-        System.out.println("SEND VERIFICATION EMAIL");
+        System.out.println("--- Task: send confirmation email");
+
         String username = (String) execution.getVariable("username");
 
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -43,7 +44,7 @@ public class SendConfirmationEmailDelegate implements JavaDelegate {
 
         String processId = execution.getProcessInstanceId();
         String emailConfLink =
-                String.format("http://localhost:8080/user/confirm-email/%s/%s", processId, sha256hex);
+                String.format("http://localhost:8080/users/confirm-email/%s/%s", processId, sha256hex);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(u.getEmail());

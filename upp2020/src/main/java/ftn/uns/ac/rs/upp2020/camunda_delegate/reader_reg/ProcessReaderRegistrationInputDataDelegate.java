@@ -1,8 +1,9 @@
-package ftn.uns.ac.rs.upp2020.camunda_delegate.author_reg;
+package ftn.uns.ac.rs.upp2020.camunda_delegate.reader_reg;
 
+
+import ftn.uns.ac.rs.upp2020.domain.Role;
 import ftn.uns.ac.rs.upp2020.domain.UserGenre;
 import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
-import ftn.uns.ac.rs.upp2020.domain.Role;
 import ftn.uns.ac.rs.upp2020.repository.GenreRepository;
 import ftn.uns.ac.rs.upp2020.repository.UserGenreRepository;
 import ftn.uns.ac.rs.upp2020.repository.UserRepository;
@@ -14,12 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
-public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
+public class ProcessReaderRegistrationInputDataDelegate implements JavaDelegate {
 
     @Autowired
     IdentityService identityService;
@@ -36,33 +36,35 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     @Override
-    @Transactional
-    public void execute(DelegateExecution execution) throws Exception {
-        System.out.println("--- Task: process author registration input");
+    public void execute(DelegateExecution delegateExecution) throws Exception {
+        System.out.println("--- Task: process reader registration input data");
 
-        String password = (String) execution.getVariable("password");
-        String username = (String) execution.getVariable("username");
-        String email = (String) execution.getVariable("email");
+        String password = (String) delegateExecution.getVariable("password");
+        String username = (String) delegateExecution.getVariable("username");
+        String email = (String) delegateExecution.getVariable("email");
 
-        String firstName = (String) execution.getVariable("firstName");
-        String lastName = (String) execution.getVariable("lastName");
-        String city = (String) execution.getVariable("city");
-        String country = (String) execution.getVariable("country");
-        List<String> genres = (List<String>) execution.getVariable("selectGenres");
+        String firstName = (String) delegateExecution.getVariable("firstName");
+        String lastName = (String) delegateExecution.getVariable("lastName");
+        String city = (String) delegateExecution.getVariable("city");
+        String country = (String) delegateExecution.getVariable("country");
 
+
+        Boolean isBeta = (Boolean) delegateExecution.getVariable("isBeta");
 
         User findUser = identityService.createUserQuery().userId(username).singleResult();
 
         if (findUser != null) {
-            execution.setVariable("isRegFormValid", false);
+            delegateExecution.setVariable("isRegFormValid", false);
             throw new GeneralException("User already exists!");
         }
 
-        if (genres.size() < 1) {
-            execution.setVariable("isRegFormValid", false);
-            throw new GeneralException("Author must select at least one genre.");
+
+        List<String> genres = new ArrayList<>();
+        Role userRole = Role.READER;
+        if (isBeta) {
+            genres = (List<String>) delegateExecution.getVariable("selectGenres");
+            userRole = Role.BETA_READER;
         }
 
 
@@ -75,20 +77,19 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
 
         identityService.saveUser(newUser);
 
-
         ftn.uns.ac.rs.upp2020.domain.User user =
-               new ftn.uns.ac.rs.upp2020.domain.User(
-                       username,
-                       passwordEncoder.encode(password),
-                       Role.AUTHOR,
-                       email,
-                       firstName,
-                       lastName,
-                       city,
-                       country,
-                       "",
-                       false,
-                       false);
+                new ftn.uns.ac.rs.upp2020.domain.User(
+                        username,
+                        passwordEncoder.encode(password),
+                        userRole,
+                        email,
+                        firstName,
+                        lastName,
+                        city,
+                        country,
+                        "",
+                        false,
+                        false);
 
         // Save new user
         ftn.uns.ac.rs.upp2020.domain.User savedUser = userRepository.save(user);
@@ -102,6 +103,6 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
             userGenreRepository.save(userGenre);
         });
 
-        execution.setVariable("isRegFormValid", true);
+        delegateExecution.setVariable("isRegFormValid", true);
     }
 }

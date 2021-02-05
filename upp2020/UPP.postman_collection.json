@@ -6,7 +6,7 @@
 	},
 	"item": [
 		{
-			"name": "general",
+			"name": "USER",
 			"item": [
 				{
 					"name": "(Auth) login",
@@ -37,6 +37,40 @@
 					"response": []
 				},
 				{
+					"name": "(Auth) get auth user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXJhIiwiY3JlYXRlZCI6MTYxMDkxNjk1MDgzMSwicm9sZXMiOlt7ImF1dGhvcml0eSI6IlJFQURFUiJ9XSwiZXhwIjoxNjI4OTE2OTUwfQ.fHwIIbOp9zpkd50kTnaSdj9E3qn3KwveHPNVsJ5ePRmro2OXUpas-YRGJyDHclSDB1nh0jrYIurNNauS4pc0Rg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/auth-user",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"auth-user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "TASK",
+			"item": [
+				{
 					"name": "(Task) get tasks",
 					"request": {
 						"auth": {
@@ -45,14 +79,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/user/tasks",
+							"raw": "http://localhost:8080/tasks",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"user",
 								"tasks"
 							]
 						}
@@ -60,29 +93,76 @@
 					"response": []
 				},
 				{
-					"name": "(Auth) get auth user",
+					"name": "(Task) get task form",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwZXJhIiwiY3JlYXRlZCI6MTYxMDg5NzAyNDI3MCwicm9sZXMiOlt7ImF1dGhvcml0eSI6IlJFQURFUiJ9XSwiZXhwIjoxNjI4ODk3MDI0fQ.hrIXowUgEKN8EzbPEmJph9A6bRbIc9-Sq1NWYR-tgOAV9qMdoN8D4hBQFrvEcjOj0jyAk8VJ715EjIeV0mDKpg",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/authUser",
+							"raw": "http://localhost:8080/tasks/4d5c296b-59da-11eb-8c67-4cbb58327120/form",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"authUser"
+								"tasks",
+								"4d5c296b-59da-11eb-8c67-4cbb58327120",
+								"form"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Task) submit task form",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tasks/submit/c00335db-4971-11eb-8771-4cbb58327120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"submit",
+								"c00335db-4971-11eb-8771-4cbb58327120"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(Task) upload files",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "files",
+									"type": "file",
+									"src": [
+										"/C:/Users/Lazar/Desktop/Literarno udruženje.pdf",
+										"/C:/Users/Lazar/Desktop/Master's apron.txt"
+									]
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/tasks/4d5c296b-59da-11eb-8c67-4cbb58327120/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"4d5c296b-59da-11eb-8c67-4cbb58327120",
+								"upload"
 							]
 						}
 					},
@@ -99,14 +179,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/user/start-author-registration",
+							"raw": "http://localhost:8080/users/start-author-registration",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"user",
+								"users",
 								"start-author-registration"
 							]
 						}
@@ -119,17 +199,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/task/c2171ee2-4923-11eb-b3af-4cbb58327120/rendered-form",
+							"raw": "http://localhost:8080/tasks/f9c53359-59c2-11eb-974d-4cbb58327120/form",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"api",
-								"task",
-								"c2171ee2-4923-11eb-b3af-4cbb58327120",
-								"rendered-form"
+								"tasks",
+								"f9c53359-59c2-11eb-974d-4cbb58327120",
+								"form"
 							]
 						}
 					},
@@ -142,7 +221,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"name\": \"username\",\r\n        \"value\": \"mika\"\r\n    },\r\n    {\r\n        \"name\": \"password\",\r\n        \"value\": \"123456\"\r\n    },\r\n    {\r\n        \"name\": \"email\",\r\n        \"value\": \"lazar.kmarkovic@gmail.com\"\r\n    },\r\n    {\r\n        \"name\": \"firstName\",\r\n        \"value\": \"Mika\"\r\n    },\r\n    {\r\n        \"name\": \"lastName\",\r\n        \"value\": \"Mikic\"\r\n    },\r\n    {\r\n        \"name\": \"city\",\r\n        \"value\": \"Novi Sad\"\r\n    },\r\n    {\r\n        \"name\": \"country\",\r\n        \"value\": \"Srbija\"\r\n    },\r\n    {\r\n        \"name\": \"select_genres\",\r\n        \"value\": [\r\n            \"FILOZOFIJA\",\r\n            \"UMETNOST\"\r\n        ],\r\n        \"isList\": true\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"name\": \"username\",\r\n        \"value\": \"mika\"\r\n    },\r\n    {\r\n        \"name\": \"password\",\r\n        \"value\": \"123456\"\r\n    },\r\n    {\r\n        \"name\": \"email\",\r\n        \"value\": \"lazar.kmarkovic+2@gmail.com\"\r\n    },\r\n    {\r\n        \"name\": \"firstName\",\r\n        \"value\": \"Mika\"\r\n    },\r\n    {\r\n        \"name\": \"lastName\",\r\n        \"value\": \"Mikic\"\r\n    },\r\n    {\r\n        \"name\": \"city\",\r\n        \"value\": \"Novi Sad\"\r\n    },\r\n    {\r\n        \"name\": \"country\",\r\n        \"value\": \"Srbija\"\r\n    },\r\n    {\r\n        \"name\": \"selectGenres\",\r\n        \"value\": [\r\n            \"FILOZOFIJA\",\r\n            \"UMETNOST\"\r\n        ],\r\n        \"isList\": true\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -150,16 +229,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/user/submit/c00335db-4971-11eb-8771-4cbb58327120",
+							"raw": "http://localhost:8080/tasks/submit/f9c53359-59c2-11eb-974d-4cbb58327120",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"user",
+								"tasks",
 								"submit",
-								"c00335db-4971-11eb-8771-4cbb58327120"
+								"f9c53359-59c2-11eb-974d-4cbb58327120"
 							]
 						}
 					},
@@ -183,14 +262,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/user/confirm-email/bffec8ff-4971-11eb-8771-4cbb58327120/f98dfa0af1dc62ea0be5c1b3ee45c7d0ad82ba68c5f52548f9705532c23be897",
+							"raw": "http://localhost:8080/users/confirm-email/bffec8ff-4971-11eb-8771-4cbb58327120/f98dfa0af1dc62ea0be5c1b3ee45c7d0ad82ba68c5f52548f9705532c23be897",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8080",
 							"path": [
-								"user",
+								"users",
 								"confirm-email",
 								"bffec8ff-4971-11eb-8771-4cbb58327120",
 								"f98dfa0af1dc62ea0be5c1b3ee45c7d0ad82ba68c5f52548f9705532c23be897"
@@ -198,8 +277,52 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "(RAP) 5. submit previous works",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/tasks/submit/4d5c296b-59da-11eb-8c67-4cbb58327120",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"tasks",
+								"submit",
+								"4d5c296b-59da-11eb-8c67-4cbb58327120"
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "Bank server simulator",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/ok/jaitito",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"ok",
+						"jaitito"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

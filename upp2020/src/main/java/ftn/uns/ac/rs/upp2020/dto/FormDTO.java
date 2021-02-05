@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FormDTO {
+    private String formName;
     private String taskId;
     private String processInstanceId;
     private List<FormField> formFields;

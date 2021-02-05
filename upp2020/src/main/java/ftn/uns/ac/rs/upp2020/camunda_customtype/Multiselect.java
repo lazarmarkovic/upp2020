@@ -22,7 +22,6 @@ public class Multiselect extends SimpleFormFieldType {
 
     public Multiselect(Map<String, String> values) {
         this.values = values;
-        System.out.println(values);
     }
 
     @Override
