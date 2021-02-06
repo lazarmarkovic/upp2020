@@ -28,17 +28,20 @@ public class ProcessBookPublishingInputDelegate implements JavaDelegate {
         System.out.println("--- Task: process book publishing input");
 
         String title = (String) delegateExecution.getVariable("title");
-        String genre = (String) delegateExecution.getVariable("genre");
+        String genre = (String) delegateExecution.getVariable("selectGenre");
         String synopsis = (String) delegateExecution.getVariable("synopsis");
 
         String username = (String) delegateExecution.getVariable("starter");
         User user = userService.findByUsername(username);
 
         Genre genreObject = genreRepository.findByCode(genre);
-        Book book = new Book(title, synopsis, genreObject, user, 0);
+        Book book = new Book(title, synopsis, genreObject, user, false);
 
         Book savedBook = bookRepository.save(book);
 
         delegateExecution.setVariable("bookId", savedBook.getId());
+        delegateExecution.setVariable("title", title);
+        delegateExecution.setVariable("genre", genre);
+        delegateExecution.setVariable("synopsis", synopsis);
     }
 }

@@ -27,8 +27,8 @@ public class Book {
     @JoinColumn(name = "genre_id", referencedColumnName = "id")
     private Genre genre;
 
-    @Column(name = "status", length = 512, nullable = false)
-    private Integer status;
+    @Column(name = "approved", nullable = false)
+    private Boolean approved;
 
     @Column(name = "transcript", length = 512, nullable = true)
     private String transcript;
@@ -37,12 +37,12 @@ public class Book {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-    public Book(String title, String synopsis, Genre genre, User user, int status) {
+    public Book(String title, String synopsis, Genre genre, User user, boolean approved) {
         this.title = title;
         this.synopsis = synopsis;
         this.genre = genre;
         this.user = user;
-        this.status = status;
+        this.approved = approved;
         this.transcript = "";
     }
 

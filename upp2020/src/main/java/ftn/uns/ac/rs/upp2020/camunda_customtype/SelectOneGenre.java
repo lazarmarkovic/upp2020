@@ -27,7 +27,7 @@ public class SelectOneGenre extends SimpleFormFieldType {
     protected TypedValue convertValue(TypedValue typedValue) {
         Object value = typedValue.getValue();
         if(value == null || String.class.isInstance(value)){
-            return Variables.untypedValue(value, typedValue.isTransient());
+            return Variables.stringValue((String) value, typedValue.isTransient());
         }else {
             throw new ProcessEngineException("Value '"+value+"' is not of type strings.");
 

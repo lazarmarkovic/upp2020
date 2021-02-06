@@ -61,16 +61,6 @@ public class RegistrationController {
     public ResponseEntity<?> submitMemberVote(
             @RequestBody List<InputDataDTO> data,
             @PathVariable String taskId) throws GeneralException {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-
-        org.springframework.security.core.userdetails.User authUser =
-                (org.springframework.security.core.userdetails.User)auth.getPrincipal();
-
-        User user = userService.findByUsername(authUser.getUsername());
-
-        if (user.getRole().equals(Role.COMMITTEE_MEMBER)){
-            throw new GeneralException("User is not committee member.");
-        }
 
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
