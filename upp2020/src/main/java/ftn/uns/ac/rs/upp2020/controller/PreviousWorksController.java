@@ -1,7 +1,9 @@
 package ftn.uns.ac.rs.upp2020.controller;
 
+import ftn.uns.ac.rs.upp2020.domain.Book;
 import ftn.uns.ac.rs.upp2020.domain.PreviousWork;
 import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
+import ftn.uns.ac.rs.upp2020.repository.BookRepository;
 import ftn.uns.ac.rs.upp2020.repository.PreviousWorkRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -16,13 +18,16 @@ import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/works")
+@RequestMapping("")
 public class PreviousWorksController {
 
     @Autowired
     PreviousWorkRepository previousWorkRepository;
 
-    @GetMapping(value="/{workName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @Autowired
+    BookRepository bookRepository;
+
+    @GetMapping(value="/works/{workName}", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity downloadPDF(
             @PathVariable String workName) throws GeneralException {
 
@@ -34,6 +39,24 @@ public class PreviousWorksController {
 
         byte[] bytes = opt.get().getFile();
         String fileName = opt.get().getName();
+
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ fileName +"\"").body(bytes);
+
+    }
+
+    @GetMapping(value="/books/{bookId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity downloadBookPDF(
+            @PathVariable Long bookId) throws GeneralException {
+
+        Optional<Book> opt = bookRepository.findById(bookId);
+
+        if (opt.isEmpty()) {
+            throw new GeneralException("Book with given id not found.");
+        }
+
+        byte[] bytes = opt.get().getTranscript();
+        String fileName = opt.get().getTitle() + ".pdf";
 
         return ResponseEntity.ok().contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+ fileName +"\"").body(bytes);

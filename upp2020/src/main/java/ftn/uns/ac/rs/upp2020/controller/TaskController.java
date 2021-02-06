@@ -1,11 +1,13 @@
 package ftn.uns.ac.rs.upp2020.controller;
 
+import ftn.uns.ac.rs.upp2020.domain.Book;
 import ftn.uns.ac.rs.upp2020.domain.Genre;
 import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.dto.FileHolderDTO;
 import ftn.uns.ac.rs.upp2020.dto.FormDTO;
 import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
 import ftn.uns.ac.rs.upp2020.dto.TaskDTO;
+import ftn.uns.ac.rs.upp2020.repository.BookRepository;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import ftn.uns.ac.rs.upp2020.service.AuthenticationService;
 import ftn.uns.ac.rs.upp2020.service.GenreService;
@@ -27,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 @RestController
@@ -44,6 +45,7 @@ public class TaskController {
     private final FormService formService;
     private final GenreService genreService;
     private final UserService userService;
+    private final BookRepository bookRepository;
 
 
     @Autowired
@@ -55,7 +57,8 @@ public class TaskController {
                           TaskService taskService,
                           FormService formService,
                           GenreService genreService,
-                          UserService userService) {
+                          UserService userService,
+                          BookRepository bookRepository) {
         this.identityService = identityService;
         this.runtimeService = runtimeService;
         this.repositoryService = repositoryService;
@@ -65,6 +68,7 @@ public class TaskController {
         this.formService = formService;
         this.genreService = genreService;
         this.userService = userService;
+        this.bookRepository = bookRepository;
     }
 
     /* Generic APIs */
@@ -147,7 +151,16 @@ public class TaskController {
                 User user = userService.findByUsername(username);
                 List<String> values = user.getPreviousWorks().stream().map((w) -> "http://localhost:8080/works/" + w.getName()).collect(Collectors.toList());
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
-            } else {
+
+            } else if (fp.getTypeName().equals("selectOnePDF")) {
+            String processInstanceId = task.getProcessInstanceId();
+            Long bookId = (Long) runtimeService.getVariable(processInstanceId, "bookId");
+            Book book = bookRepository.findById(bookId).get();
+            List<String> values = new  ArrayList<>();
+
+            values.add("http://localhost:8080/books/" + book.getId());
+            readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
+        }else {
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), fp.getValue().getValue(), false));
             }
         }
