@@ -41,3 +41,22 @@ insert into camunda.aa__users(id, username, password, role, email,
                               first_name, last_name, city, country, activation_code, activated, approved)
 values (7, 'head_editor', '$2a$10$kx6ymttdiBQ/3NAz1ssxoeOF8Vwm3LSKFnEkSADPc5x8kgaj/vKnC', 'HEAD_EDITOR',
         'lazar.kmarkovic+6@gmail.com', 'HeadEditor', 'HeadEditor', 'Novi Sad', 'Srbija', '1234567', true, true);
+
+/* Beta readers */
+insert into camunda.aa__users(id, username, password, role, email,
+                              first_name, last_name, city, country, activation_code, activated, approved)
+values (8, 'beta1', '$2a$10$kx6ymttdiBQ/3NAz1ssxoeOF8Vwm3LSKFnEkSADPc5x8kgaj/vKnC', 'BETA_READER',
+        'lazar.kmarkovic+7@gmail.com', 'Beta1', 'Beta1', 'Valjevo', 'Srbija', '1234567', true, true);
+insert into camunda.aa__users(id, username, password, role, email,
+                              first_name, last_name, city, country, activation_code, activated, approved)
+values (9, 'beta2', '$2a$10$kx6ymttdiBQ/3NAz1ssxoeOF8Vwm3LSKFnEkSADPc5x8kgaj/vKnC', 'BETA_READER',
+        'lazar.kmarkovic+8@gmail.com', 'Beta2', 'Beta2', 'Valjevo', 'Srbija', '1234567', true, true);
+insert into camunda.aa__users(id, username, password, role, email,
+                              first_name, last_name, city, country, activation_code, activated, approved)
+values (10, 'beta3', '$2a$10$kx6ymttdiBQ/3NAz1ssxoeOF8Vwm3LSKFnEkSADPc5x8kgaj/vKnC', 'BETA_READER',
+        'lazar.kmarkovic+8@gmail.com', 'Beta2', 'Beta2', 'Valjevo', 'Srbija', '1234567', true, true);
+
+/* Beta reader - Genre */
+insert into camunda.aa__user_genres(id, genre_id, user_id) value (1, 3, 8);
+insert into camunda.aa__user_genres(id, genre_id, user_id) value (2, 2, 9);
+insert into camunda.aa__user_genres(id, genre_id, user_id) value (3, 3, 10);

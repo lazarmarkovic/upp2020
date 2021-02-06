@@ -18,6 +18,7 @@ export class TaskComponent implements OnInit {
 
   public regUserForm = new FormGroup({});
   public genres: any[] | undefined;
+  public betaReaders: any[] | undefined;
   public enumValues: any[] | undefined;
 
   public selectedFiles = [];
@@ -56,6 +57,12 @@ export class TaskComponent implements OnInit {
             if (field.type.name === 'multiselectGenre'  ) {
               // @ts-ignore
               this.genres = Object.keys(field.type.values);
+            }
+
+            // @ts-ignore
+            if (field.type.name === 'multiselectBeta'  ) {
+              // @ts-ignore
+              this.betaReaders = Object.keys(field.type.values);
             }
 
             if (field.type.name === 'selectOneGenre'  ) {

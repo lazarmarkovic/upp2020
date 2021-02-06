@@ -106,6 +106,7 @@ if(formFields!=null){
     <bpmn:exclusiveGateway id="Gateway_1dmpta5">
       <bpmn:incoming>Flow_0cw7jnx</bpmn:incoming>
       <bpmn:incoming>Flow_02rlr25</bpmn:incoming>
+      <bpmn:incoming>Flow_1sp4rxi</bpmn:incoming>
       <bpmn:outgoing>Flow_1jzvxce</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0cw7jnx" sourceRef="Activity_0ts2dx0" targetRef="Gateway_1dmpta5" />
@@ -191,12 +192,54 @@ if(formFields!=null){
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1yafcj9</bpmn:incoming>
-      <bpmn:outgoing>Flow_1tljaa0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ejqm5w</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:endEvent id="Event_1iscrd1">
-      <bpmn:incoming>Flow_1tljaa0</bpmn:incoming>
+    <bpmn:exclusiveGateway id="Gateway_17rxkzi">
+      <bpmn:incoming>Flow_0ejqm5w</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sp4rxi</bpmn:outgoing>
+      <bpmn:outgoing>Flow_16pm1lg</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0ejqm5w" sourceRef="Activity_0ci6i85" targetRef="Gateway_17rxkzi" />
+    <bpmn:sequenceFlow id="Flow_1sp4rxi" name="not approved" sourceRef="Gateway_17rxkzi" targetRef="Gateway_1dmpta5">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approve=="NO"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_16pm1lg" name="approved" sourceRef="Gateway_17rxkzi" targetRef="Activity_0e5gtjn">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${approve=="YES"}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_0e5gtjn" name="prepare beta reader list" camunda:class="ftn.uns.ac.rs.upp2020.camunda_delegate.book_publish.working.PrepareBetaReaderListDelegate">
+      <bpmn:incoming>Flow_16pm1lg</bpmn:incoming>
+      <bpmn:outgoing>Flow_08qpll7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_08qpll7" sourceRef="Activity_0e5gtjn" targetRef="Activity_0wyd2b5" />
+    <bpmn:userTask id="Activity_0wyd2b5" name="choose beta readers by head editor" camunda:assignee="${headEditor}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="betaReadersSelect" label="Beta readers" type="multiselectBeta" />
+        </camunda:formData>
+        <camunda:taskListener event="create">
+          <camunda:script scriptFormat="Groovy">taskFormData = task.getExecution().getProcessEngineServices().getFormService().getTaskFormData(task.getId());
+betaReaders= task.getExecution().getVariable("beta_readers");
+
+formFields = taskFormData.getFormFields();
+if(formFields!=null){
+   for(field in formFields){
+       if( field.getId() == "betaReadersSelect"){
+           items = field.getType().getValues();
+           for(br in betaReaders){
+               items.put(br.getUsername(),br.getFirstName() + " " + br.getLastName());
+           }
+       }
+   }
+}</camunda:script>
+        </camunda:taskListener>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08qpll7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zl3q4e</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_0wa5ac1">
+      <bpmn:incoming>Flow_0zl3q4e</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1tljaa0" sourceRef="Activity_0ci6i85" targetRef="Event_1iscrd1" />
+    <bpmn:sequenceFlow id="Flow_0zl3q4e" sourceRef="Activity_0wyd2b5" targetRef="Event_0wa5ac1" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="book_publishing">
@@ -282,9 +325,33 @@ if(formFields!=null){
         <di:waypoint x="1530" y="1130" />
         <di:waypoint x="1530" y="1200" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1tljaa0_di" bpmnElement="Flow_1tljaa0">
+      <bpmndi:BPMNEdge id="Flow_0ejqm5w_di" bpmnElement="Flow_0ejqm5w">
         <di:waypoint x="1530" y="1280" />
-        <di:waypoint x="1530" y="1362" />
+        <di:waypoint x="1530" y="1355" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sp4rxi_di" bpmnElement="Flow_1sp4rxi">
+        <di:waypoint x="1555" y="1380" />
+        <di:waypoint x="1820" y="1380" />
+        <di:waypoint x="1820" y="370" />
+        <di:waypoint x="1555" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1577" y="1353" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16pm1lg_di" bpmnElement="Flow_16pm1lg">
+        <di:waypoint x="1530" y="1405" />
+        <di:waypoint x="1530" y="1470" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1537" y="1423" width="46" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08qpll7_di" bpmnElement="Flow_08qpll7">
+        <di:waypoint x="1530" y="1550" />
+        <di:waypoint x="1530" y="1610" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zl3q4e_di" bpmnElement="Flow_0zl3q4e">
+        <di:waypoint x="1580" y="1650" />
+        <di:waypoint x="1672" y="1650" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="Gateway_0zgjxz1_di" bpmnElement="Gateway_0zgjxz1" isMarkerVisible="true">
         <dc:Bounds x="1505" y="615" width="50" height="50" />
@@ -337,8 +404,17 @@ if(formFields!=null){
       <bpmndi:BPMNShape id="Activity_04qlwb7_di" bpmnElement="Activity_0ci6i85">
         <dc:Bounds x="1480" y="1200" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1iscrd1_di" bpmnElement="Event_1iscrd1">
-        <dc:Bounds x="1512" y="1362" width="36" height="36" />
+      <bpmndi:BPMNShape id="Gateway_17rxkzi_di" bpmnElement="Gateway_17rxkzi" isMarkerVisible="true">
+        <dc:Bounds x="1505" y="1355" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0azh1e0_di" bpmnElement="Activity_0e5gtjn">
+        <dc:Bounds x="1480" y="1470" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1a74lwy_di" bpmnElement="Activity_0wyd2b5">
+        <dc:Bounds x="1480" y="1610" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0wa5ac1_di" bpmnElement="Event_0wa5ac1">
+        <dc:Bounds x="1672" y="1632" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1lplfx6_di" bpmnElement="Event_0j4uvdw">
         <dc:Bounds x="1562" y="912" width="36" height="36" />

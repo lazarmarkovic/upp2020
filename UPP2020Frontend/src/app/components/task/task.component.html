@@ -59,6 +59,12 @@
               {{field.type.values[val]}}
             </option>
           </select>
+          <select multiple formControlName={{field.id}} *ngIf="field.type.name=='multiselectBeta'"
+                  class="form-control">
+            <option *ngFor="let val of betaReaders" value={{val}}>
+              {{field.type.values[val]}}
+            </option>
+          </select>
           <select formControlName={{field.id}} *ngIf="field.type.name=='selectOneGenre'"
                   class="form-control">
             <option *ngFor="let val of genres" value={{val}}>

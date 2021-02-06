@@ -25,6 +25,7 @@ public class CustomFieldTypeProcessEngineConfiguration implements ProcessEngineP
         formTypes.add(new MultiselectGenre());
         formTypes.add(new SelectOneGenre());
         formTypes.add(new SelectOnePDF());
+        formTypes.add(new MultiselectBeta());
 
         formTypes.add(new FileUpload());
         formTypes.add(new MultiselectPDF());
