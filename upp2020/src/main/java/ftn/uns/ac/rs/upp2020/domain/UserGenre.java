@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 
 @Entity
 @Table(name = "aa__user_genres")
 @Getter
 @Setter
-public class UserGenre {
+public class UserGenre implements Serializable  {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

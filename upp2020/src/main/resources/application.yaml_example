@@ -1,6 +1,6 @@
 server:
   tomcat:
-    connection-timeout: 5000
+    connection-timeout: 15000
   port: 8080
 
 spring:
@@ -13,9 +13,9 @@ spring:
 
   datasource:
     initialization-mode: always
-    url: jdbc:mysql://localhost:3306/camunda?autoReconnect=true
+    url : jdbc:mysql://127.0.0.1:3306/camunda
     username: root
-    password:
+    password: password
 
 camunda.bpm.admin-user:
   id: demo
@@ -27,7 +27,7 @@ spring.mail:
   host: smtp.gmail.com
   port: 587
   username: upp2020tim29@gmail.com
-  password:
+  password: sdfsd545GHTP4555
 
   properties.mail.smtp:
     auth: true

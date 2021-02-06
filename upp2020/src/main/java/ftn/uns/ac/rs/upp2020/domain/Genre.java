@@ -9,7 +9,7 @@ import java.io.Serializable;
 
 
 @Entity
-@Table(name = "aa__genre")
+@Table(name = "aa__genres")
 @Getter
 @Setter
 public class Genre implements Serializable {

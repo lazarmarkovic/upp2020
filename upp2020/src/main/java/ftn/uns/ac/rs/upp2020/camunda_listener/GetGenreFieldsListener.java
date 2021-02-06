@@ -17,8 +17,13 @@ public class GetGenreFieldsListener implements ExecutionListener {
 
     @Override
     public void notify(DelegateExecution execution) throws Exception {
+        System.out.println("--- Listener: store genres in process var");
+
         ArrayList<Genre> genres = (ArrayList<Genre>) genreRepository.findAll();
-        System.out.println("Get all genre fields - LISTENER");
         execution.setVariable("allGenres", genres);
+
+        for (Genre genre : genres) {
+            System.out.println(genre);
+        }
     }
 }

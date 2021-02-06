@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class User implements Serializable {
     @Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +23,10 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private List<UserGenre> userGenres;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private List<PreviousWork> previousWorks;
 
     @Column(name = "username", length = 512, nullable = false)
     private String username;
@@ -54,7 +59,20 @@ public class User {
     @Column(name = "activated", nullable = false)
     private Boolean verified;
 
-    public User(String username, String password, Role role, String email, String firstName, String lastName, String city, String country, String verificationCode, Boolean verified) {
+    @Column(name = "approved", nullable = false)
+    private Boolean approved;
+
+    public User(String username,
+                String password,
+                Role role,
+                String email,
+                String firstName,
+                String lastName,
+                String city,
+                String country,
+                String verificationCode,
+                Boolean verified,
+                Boolean approved) {
         this.username = username;
         this.password = password;
         this.role = role;
@@ -65,5 +83,6 @@ public class User {
         this.country = country;
         this.verificationCode = verificationCode;
         this.verified = verified;
+        this.approved = approved;
     }
 }

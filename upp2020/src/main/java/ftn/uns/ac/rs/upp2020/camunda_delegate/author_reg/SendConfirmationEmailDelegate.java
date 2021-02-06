@@ -29,7 +29,8 @@ public class SendConfirmationEmailDelegate implements JavaDelegate {
     @Override
     @Transactional
     public void execute(DelegateExecution execution) throws Exception {
-        System.out.println("SEND VERIFICATION EMAIL");
+        System.out.println("--- Task: send confirmation email");
+
         String username = (String) execution.getVariable("username");
 
         MessageDigest digest = MessageDigest.getInstance("SHA-256");

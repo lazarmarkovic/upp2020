@@ -40,7 +40,8 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
     @Override
     @Transactional
     public void execute(DelegateExecution execution) throws Exception {
-        System.out.println("PROCESS REGISTRATION INPUT DATA");
+        System.out.println("--- Task: process author registration input");
+
         String password = (String) execution.getVariable("password");
         String username = (String) execution.getVariable("username");
         String email = (String) execution.getVariable("email");
@@ -86,6 +87,7 @@ public class ProcessAuthorRegistrationInputDelegate implements JavaDelegate {
                        city,
                        country,
                        "",
+                       false,
                        false);
 
         // Save new user
