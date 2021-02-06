@@ -1,10 +1,8 @@
 package ftn.uns.ac.rs.upp2020.controller;
 
 
-import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.dto.*;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
-import ftn.uns.ac.rs.upp2020.service.FileManipulationServiceImpl;
 
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
@@ -12,8 +10,6 @@ import org.camunda.bpm.engine.runtime.ProcessInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,10 +29,6 @@ public class UserController {
 
     private final TaskService taskService;
     private final FormService formService;
-
-
-    @Autowired
-    FileManipulationServiceImpl fileServiceManipulation;
 
     @Autowired
     public UserController(IdentityService identityService,

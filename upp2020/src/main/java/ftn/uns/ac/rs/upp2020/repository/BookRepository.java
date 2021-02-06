@@ -10,10 +10,4 @@ import java.util.Optional;
 
 @Repository
 public interface BookRepository  extends JpaRepository<Book, Long> {
-
-    @Query(value = "select b from Book b where b.id = :bookId")
-    Optional<Book> findById(Long bookId);
-
-    @Query(value = "select b from Book b where b.transcript = :transcript AND b.id <> :bookId")
-    Optional<List<Book>> findAllBooksWithSameTranscript(String transcript, Long bookId);
 }

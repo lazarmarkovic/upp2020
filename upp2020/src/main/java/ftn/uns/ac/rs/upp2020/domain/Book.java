@@ -30,8 +30,10 @@ public class Book {
     @Column(name = "approved", nullable = false)
     private Boolean approved;
 
-    @Column(name = "transcript", length = 512, nullable = true)
-    private String transcript;
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "transcript", columnDefinition = "MEDIUMBLOB", nullable = true)
+    private byte[] transcript;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -43,7 +45,7 @@ public class Book {
         this.genre = genre;
         this.user = user;
         this.approved = approved;
-        this.transcript = "";
+        this.transcript = null;
     }
 
     public Book() {}
