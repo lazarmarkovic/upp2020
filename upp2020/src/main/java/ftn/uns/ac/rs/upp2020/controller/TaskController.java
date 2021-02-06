@@ -137,11 +137,11 @@ public class TaskController {
 
         /* FILL READONLY FIELDS */
         for (FormField fp : fieldReadonly) {
-            if (fp.getTypeName().equals("multiselectGenre")) {
+            if (fp.getTypeName().equals("multiselectGenre") || fp.getTypeName().equals("selectOneGenre")) {
                 List<String> values = genreService.getAll().stream().map((Genre::getName)).collect(Collectors.toList());
                 readonlyFields.add(new InputDataDTO(fp.getLabel(), values, true));
 
-            } else  if (fp.getTypeName().equals("multiselectPDF")) {
+            } else if (fp.getTypeName().equals("multiselectPDF")) {
                 String processInstanceId = task.getProcessInstanceId();
                 String username = (String) runtimeService.getVariable(processInstanceId, "username");
                 User user = userService.findByUsername(username);

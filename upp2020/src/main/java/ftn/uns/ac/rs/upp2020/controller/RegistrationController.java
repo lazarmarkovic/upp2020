@@ -1,14 +1,20 @@
 package ftn.uns.ac.rs.upp2020.controller;
 
 
+import ftn.uns.ac.rs.upp2020.domain.Role;
+import ftn.uns.ac.rs.upp2020.domain.User;
 import ftn.uns.ac.rs.upp2020.dto.InputDataDTO;
+import ftn.uns.ac.rs.upp2020.exceptions.GeneralException;
 import ftn.uns.ac.rs.upp2020.security.TokenUtils;
 import ftn.uns.ac.rs.upp2020.service.GenreService;
+import ftn.uns.ac.rs.upp2020.service.UserService;
 import org.camunda.bpm.engine.*;
 import org.camunda.bpm.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -20,6 +26,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/tasks")
 public class RegistrationController {
 
+    private final UserService userService;
     private final IdentityService identityService;
     private final RuntimeService runtimeService;
     private final RepositoryService repositoryService;
@@ -31,13 +38,15 @@ public class RegistrationController {
 
 
     @Autowired
-    public RegistrationController(IdentityService identityService,
-                          RuntimeService runtimeService,
-                          RepositoryService repositoryService,
-                          TokenUtils tokenUtils,
-                          TaskService taskService,
-                          FormService formService,
-                          GenreService genreService) {
+    public RegistrationController(UserService userService,
+                                  IdentityService identityService,
+                                  RuntimeService runtimeService,
+                                  RepositoryService repositoryService,
+                                  TokenUtils tokenUtils,
+                                  TaskService taskService,
+                                  FormService formService,
+                                  GenreService genreService) {
+        this.userService = userService;
         this.identityService = identityService;
         this.runtimeService = runtimeService;
         this.repositoryService = repositoryService;
@@ -51,7 +60,18 @@ public class RegistrationController {
     @PostMapping(path="/submit-member-vote/{taskId}", consumes = "application/json")
     public ResponseEntity<?> submitMemberVote(
             @RequestBody List<InputDataDTO> data,
-            @PathVariable String taskId) {
+            @PathVariable String taskId) throws GeneralException {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        org.springframework.security.core.userdetails.User authUser =
+                (org.springframework.security.core.userdetails.User)auth.getPrincipal();
+
+        User user = userService.findByUsername(authUser.getUsername());
+
+        if (user.getRole().equals(Role.COMMITTEE_MEMBER)){
+            throw new GeneralException("User is not committee member.");
+        }
+
         HashMap<String, Object> map = (HashMap<String, Object>) data.stream()
                 .collect(Collectors.toMap(InputDataDTO::getName, InputDataDTO::getValue));
 

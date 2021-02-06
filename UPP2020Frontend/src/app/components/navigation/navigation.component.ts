@@ -53,6 +53,17 @@ export class NavigationComponent implements OnInit {
       );
   }
 
+  startWorkPublishing(): void {
+    this.userService
+      .runWorkPublishing()
+      .subscribe(
+        response => {
+          this.tService.success('Work publishing process started', 'Success');
+        },
+        err => {}
+      );
+  }
+
   logout(): void {
     sessionStorage.removeItem('accessToken');
     sessionStorage.removeItem('authUser');

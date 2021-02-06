@@ -17,4 +17,8 @@ export class UserService {
     return this.httpClient.get('/users/start-reader-registration');
   }
 
+  runWorkPublishing(): Observable<any> {
+    return this.httpClient.get('/users/start-work-publishing');
+  }
+
 }

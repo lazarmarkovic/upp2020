@@ -58,6 +58,11 @@ export class TaskComponent implements OnInit {
               this.genres = Object.keys(field.type.values);
             }
 
+            if (field.type.name === 'selectOneGenre'  ) {
+              // @ts-ignore
+              this.genres = Object.keys(field.type.values);
+            }
+
             if (field.type.name === 'enum') {
               this.enumValues = Object.keys(field.type.values);
             }

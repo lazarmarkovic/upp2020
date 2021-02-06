@@ -12,17 +12,6 @@ import javax.persistence.*;
 @Setter
 public class Book {
 
-    public Book(String title2, String synopsis2, String genre2, User u, int status) {
-        this.title = title2;
-        this.synopsis = synopsis2;
-        this.genre = genre2;
-        this.user = u;
-        this.status = 0;
-        this.transcript = "";
-    }
-    
-    public Book() {}
-
 	@Id
     @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,21 +23,28 @@ public class Book {
     @Column(name = "synopsis", length = 512, nullable = false)
     private String synopsis;
 
-    @Column(name = "genre", length = 512, nullable = false)
-    private String genre;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "genre_id", referencedColumnName = "id")
+    private Genre genre;
 
     @Column(name = "status", length = 512, nullable = false)
     private Integer status;
 
-    
     @Column(name = "transcript", length = 512, nullable = true)
     private String transcript;
 
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-
-    public void setStatus(int status) {
+    public Book(String title, String synopsis, Genre genre, User user, int status) {
+        this.title = title;
+        this.synopsis = synopsis;
+        this.genre = genre;
+        this.user = user;
         this.status = status;
+        this.transcript = "";
     }
+
+    public Book() {}
 }

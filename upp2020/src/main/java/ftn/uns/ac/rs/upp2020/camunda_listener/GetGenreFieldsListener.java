@@ -21,5 +21,9 @@ public class GetGenreFieldsListener implements ExecutionListener {
 
         ArrayList<Genre> genres = (ArrayList<Genre>) genreRepository.findAll();
         execution.setVariable("allGenres", genres);
+
+        for (Genre genre : genres) {
+            System.out.println(genre);
+        }
     }
 }

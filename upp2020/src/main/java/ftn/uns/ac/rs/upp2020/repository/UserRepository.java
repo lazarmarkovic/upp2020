@@ -24,7 +24,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByUsernameAndVerified(String username, Boolean verified);
 
-    @Query(value = "select t from User t where role = ftn.uns.ac.rs.upp2020.domain.Role.EDITOR")
+    @Query(value = "select t from User t where t.role = ftn.uns.ac.rs.upp2020.domain.Role.EDITOR")
     List<User> findAllActiveUsers();
   
     User findByUsernameAndVerifiedAndApproved(String username, Boolean verified, Boolean approved);
